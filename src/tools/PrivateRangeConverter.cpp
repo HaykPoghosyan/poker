@@ -94,9 +94,9 @@ vector<PrivateCards> PrivateRangeConverter::rangeStr2Cards(string range_str, vec
         }else throw runtime_error(tfm::format(" range str %s len not valid ",one_range));
     }
 
-    // 排除初试range中重复的情况
-    for(std::size_t i = 0;i < private_cards.size();i ++){
-        for(std::size_t j = i + 1;j < private_cards.size();j ++) {
+    // Drop duplicate combos from the initial range
+    for(std::size_t i = 0;i < private_cards.size();i++){
+        for(std::size_t j = i + 1;j < private_cards.size();j++) {
             PrivateCards one_cards = private_cards[i];
             PrivateCards another_cards = private_cards[j];
             if (one_cards.card1 == another_cards.card1 && one_cards.card2 == another_cards.card2){
@@ -115,7 +115,7 @@ vector<PrivateCards> PrivateRangeConverter::rangeStr2Cards(string range_str, vec
     }
 
     vector<PrivateCards> private_cards_list(private_cards.size());
-    for(std::size_t i = 0;i < private_cards.size();i ++){
+    for(std::size_t i = 0;i < private_cards.size();i++){
         private_cards_list[i] = private_cards[i];
         //System.out.print(String.format("[%s-%s]",Card.intCard2Str(private_cards_list[i].card1),Card.intCard2Str(private_cards_list[i].card2)));
     }

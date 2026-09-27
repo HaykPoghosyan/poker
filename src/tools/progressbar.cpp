@@ -78,7 +78,7 @@ void progressbar::update() {
             else if (perc == 100)              std::cout << "\b\b\b\b\b";
 
             // erase 'todo_char'
-            for (int j = 0; j < 50-(perc-1)/2; ++j) {
+            for (int j = 0; j < 50-(perc-1)/2; j++) {
                 std::cout << std::string(todo_char.size(), '\b');
             }
 
@@ -87,7 +87,7 @@ void progressbar::update() {
             else           std::cout << done_char;
 
             // refill with 'todo_char'
-            for (int j = 0; j < 50-(perc-1)/2-1; ++j) std::cout << todo_char;
+            for (int j = 0; j < 50-(perc-1)/2-1; j++) std::cout << todo_char;
 
             // readd trailing percentage characters
             std::cout << closing_bracket_char << ' ' << perc << '%';

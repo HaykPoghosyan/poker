@@ -30,7 +30,6 @@ int PrivateCards::hashCode() {
     return this->hash_code;
 }
 
-
 string PrivateCards::toString() {
     if (card1 > card2) {
         return Card::intCard2Str(card1) + Card::intCard2Str(card2);

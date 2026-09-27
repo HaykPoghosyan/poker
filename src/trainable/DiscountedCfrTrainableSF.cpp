@@ -59,8 +59,8 @@ const vector<float> DiscountedCfrTrainableSF::getcurrentStrategyNoCache() {
     // calculate r_plus_sum on the fly, store r_plus as floats locally
     vector<float> r_plus_sum = vector<float>(this->r_plus.size());
     fill(r_plus_sum.begin(),r_plus_sum.end(),0);
-    for (int action_id = 0;action_id < action_number;action_id ++) {
-        for(int private_id = 0;private_id < this->card_number;private_id ++){
+    for (int action_id = 0;action_id < action_number;action_id++) {
+        for(int private_id = 0;private_id < this->card_number;private_id++){
             int index = action_id * this->card_number + private_id;
             r_plus_sum[private_id] += max(float(0.0),this->r_plus[index]);
         }
@@ -84,7 +84,7 @@ const vector<float> DiscountedCfrTrainableSF::getcurrentStrategyNoCache() {
 
 void DiscountedCfrTrainableSF::setEv(const vector<float>& evs){
     if(evs.size() != this->evs.size()) throw runtime_error("size mismatch in discountcfrtrainable setEV");
-    for(std::size_t i = 0;i < evs.size();i ++) if(evs[i] == evs[i])this->evs[i] = evs[i];
+    for(std::size_t i = 0;i < evs.size();i++) if(evs[i] == evs[i])this->evs[i] = evs[i];
 }
 
 void DiscountedCfrTrainableSF::updateRegrets(const vector<float>& regrets, int iteration_number, const vector<float>& reach_probs) {
@@ -98,12 +98,12 @@ void DiscountedCfrTrainableSF::updateRegrets(const vector<float>& regrets, int i
 
     vector<float> r_plus_sum = vector<float>(this->r_plus.size());
     fill(r_plus_sum.begin(),r_plus_sum.end(),0);
-    for (int action_id = 0;action_id < action_number;action_id ++) {
-        for(int private_id = 0;private_id < this->card_number;private_id ++){
+    for (int action_id = 0;action_id < action_number;action_id++) {
+        for(int private_id = 0;private_id < this->card_number;private_id++){
             int index = action_id * this->card_number + private_id;
             float one_reg = regrets[index];
 
-            // 更新 R+
+            // Update R+
             float this_r_plus_of_index = this->r_plus[index];
             this_r_plus_of_index = one_reg + this_r_plus_of_index;
             if(this_r_plus_of_index > 0){
@@ -135,8 +135,8 @@ void DiscountedCfrTrainableSF::updateRegrets(const vector<float>& regrets, int i
     // end of inline replacement
 
     float strategy_coef = pow(((float)iteration_number / (iteration_number + 1)),gamma);
-    for (int action_id = 0;action_id < action_number;action_id ++) {
-        for(int private_id = 0;private_id < this->card_number;private_id ++) {
+    for (int action_id = 0;action_id < action_number;action_id++) {
+        for(int private_id = 0;private_id < this->card_number;private_id++) {
             int index = action_id * this->card_number + private_id;
             this->cum_r_plus[index] = this->cum_r_plus[index] * this->theta +
                 current_strategy[index] * strategy_coef;// * reach_probs[private_id];
@@ -157,11 +157,11 @@ json DiscountedCfrTrainableSF::dump_strategy(bool with_state) {
         );
     }
 
-    for(std::size_t i = 0;i < this->privateCards->size();i ++){
+    for(std::size_t i = 0;i < this->privateCards->size();i++){
         PrivateCards& one_private_card = (*this->privateCards)[i];
         vector<float> one_strategy(this->action_number);
 
-        for(int j = 0;j < this->action_number;j ++){
+        for(int j = 0;j < this->action_number;j++){
             std::size_t strategy_index = j * this->privateCards->size() + i;
             one_strategy[j] = average_strategy[strategy_index];
         }
@@ -185,11 +185,11 @@ json DiscountedCfrTrainableSF::dump_evs() {
         );
     }
 
-    for(std::size_t i = 0;i < this->privateCards->size();i ++){
+    for(std::size_t i = 0;i < this->privateCards->size();i++){
         PrivateCards& one_private_card = (*this->privateCards)[i];
         vector<float> one_evs(this->action_number);
 
-        for(int j = 0;j < this->action_number;j ++){
+        for(int j = 0;j < this->action_number;j++){
             std::size_t evs_index = j * this->privateCards->size() + i;
             one_evs[j] = average_evs[evs_index];
         }

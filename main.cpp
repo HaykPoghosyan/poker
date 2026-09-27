@@ -5,7 +5,6 @@
 #include <string>
 #include <QSettings>
 
-
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     if(MainWindow::s_textEdit == 0)

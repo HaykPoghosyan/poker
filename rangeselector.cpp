@@ -61,8 +61,8 @@ RangeSelector::RangeSelector(QTextEdit* rangeEdit,QWidget *parent,QSolverJob::Mo
 
 void RangeSelector::grid_area(int i1,int j1,int i2,int j2){
     if(i1 <= i2 && j1 <= j2){
-        for(int i = i1;i <= i2;i ++){
-            for(int j = j1;j <= j2;j ++){
+        for(int i = i1;i <= i2;i++){
+            for(int j = j1;j <= j2;j++){
                 this->rangeSelectorTableModel->setRangeAt(i,j,this->range_num);
             }
         }
@@ -160,8 +160,7 @@ void RangeSelector::on_exportRangeButton_clicked()
         fileWriter << range_text.toStdString();
         fileWriter.flush();
         fileWriter.close();
-
-         message = QObject::tr("save success");
+        message = QObject::tr("save success");
     }else{
         message = QObject::tr("save failed, file cannot be open");
     }
@@ -195,7 +194,7 @@ void RangeSelector::import_range(QString fileName){
 
 void RangeSelector::on_importRangeButton_clicked()
 {
-    QString fileName =  QFileDialog::getOpenFileName(
+    QString fileName = QFileDialog::getOpenFileName(
               this,
               tr("Open range file"),
               QDir::currentPath(),

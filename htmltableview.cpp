@@ -62,7 +62,6 @@ void HtmlTableView::mouseMoveEvent(QMouseEvent *event) {
     }
 }
 
-
 void HtmlTableView::mouseReleaseEvent(QMouseEvent *event) {
     if (!_mousePressAnchor.isEmpty()) {
         auto anchor = anchorAt(event->pos());

@@ -92,16 +92,16 @@ void CfrPlusTrainable::updateRegrets(const vector<float>& regrets, int iteration
     //Arrays.fill(this.r_plus_sum,0);
     fill(r_plus_sum.begin(),r_plus_sum.end(),0);
     fill(cum_r_plus_sum.begin(),cum_r_plus_sum.end(),0);
-    for (int action_id = 0;action_id < action_number;action_id ++) {
-        for(int private_id = 0;private_id < this->card_number;private_id ++){
+    for (int action_id = 0;action_id < action_number;action_id++) {
+        for(int private_id = 0;private_id < this->card_number;private_id++){
             int index = action_id * this->card_number + private_id;
             float one_reg = regrets[index];
 
-            // 更新 R+
+            // Update R+
             this->r_plus[index] = max((float)0.0,one_reg + this->r_plus[index]);
             this->r_plus_sum[private_id] += this->r_plus[index];
 
-            // 更新累计策略
+            // Update the cumulative strategy
             this->cum_r_plus[index] += this->r_plus[index] * iteration_number;
             this->cum_r_plus_sum[private_id] += this->cum_r_plus[index];
         }
@@ -122,7 +122,7 @@ json CfrPlusTrainable::dump_strategy(bool with_state) {
     //SolverEnvironment se = SolverEnvironment.getInstance();
     //Compairer comp = se.getCompairer();
 
-    for(int i = 0;i < this->privateCards.size();i ++){
+    for(int i = 0;i < this->privateCards.size();i++){
         PrivateCards one_private_card = this->privateCards[i];
         vector<float> one_strategy(this->action_number);
 
@@ -137,7 +137,7 @@ json CfrPlusTrainable::dump_strategy(bool with_state) {
         int rank = comp.get_rank(new int[]{one_private_card.card1,one_private_card.card2},initialBoard);
          */
 
-        for(int j = 0;j < this->action_number;j ++){
+        for(int j = 0;j < this->action_number;j++){
             int strategy_index = j * this->privateCards.size() + i;
             one_strategy[j] = average_strategy[strategy_index];
         }

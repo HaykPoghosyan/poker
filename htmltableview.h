@@ -8,7 +8,6 @@
 #include "include/ui/worditemdelegate.h"
 #include <QHeaderView>
 
-
 class HtmlTableView: public QTableView
 {
     Q_OBJECT

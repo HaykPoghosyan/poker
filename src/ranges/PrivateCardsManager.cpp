@@ -13,14 +13,14 @@ PrivateCardsManager::PrivateCardsManager(vector<vector<PrivateCards>> private_ca
     this->private_cards = private_cards;
     this->player_number = player_number;
     this->card_player_index = vector<vector<int>>(52 * 52);
-    for(int i = 0;i < 52 * 52;i ++){
+    for(int i = 0;i < 52 * 52;i++){
         this->card_player_index[i] = vector<int>(this->player_number,-1);
     }
 
-    // 用一个二维数组记录每个Private Combo的对应index,方便从一方的手牌找对方的同名卡牌的index
-    for(int player_id = 0;player_id < player_number;player_id ++){
+    // A two dimensional array holding the index of every private combo, so one player's hand can be mapped to the index of the same combo for the other player
+    for(int player_id = 0;player_id < player_number;player_id++){
         vector<PrivateCards> privateCombos = private_cards[player_id];
-        for(std::size_t i = 0;i < privateCombos.size();i ++){
+        for(std::size_t i = 0;i < privateCombos.size();i++){
             PrivateCards one_private_combo = privateCombos[i];
             this->card_player_index[one_private_combo.hashCode()][player_id] = i;
         }
@@ -48,7 +48,7 @@ int PrivateCardsManager::indPlayer2Player(int from_player, int to_player, int in
 vector<float> PrivateCardsManager::getInitialReachProb(int player, uint64_t initialboard) {
     int cards_len =  this->private_cards[player].size();
     vector<float> probs = vector<float>(cards_len);
-    for(int i = 0;i < cards_len;i ++){
+    for(int i = 0;i < cards_len;i++){
         PrivateCards pc = this->private_cards[player][i];
         if(Card::boardsHasIntercept(initialboard,Card::boardInts2long(pc.get_hands()))) {
             probs[i] = 0;
@@ -61,12 +61,12 @@ vector<float> PrivateCardsManager::getInitialReachProb(int player, uint64_t init
 
 void PrivateCardsManager::setRelativeProbs() {
     int players = this->private_cards.size();
-    for(int player_id = 0; player_id < players;player_id ++){
-        // TODO 这里只考虑了两个玩家的情况
+    for(int player_id = 0; player_id < players;player_id++){
+        // TODO: this only handles the two player case
         int oppo = 1 - player_id;
         float player_prob_sum = 0;
 
-        for(std::size_t i = 0;i < this->private_cards[player_id].size();i ++) {
+        for(std::size_t i = 0;i < this->private_cards[player_id].size();i++) {
             float oppo_prob_sum = 0;
             PrivateCards* player_card = &this->private_cards[player_id][i];
             uint64_t player_long = Card::boardInts2long(player_card->get_hands());
@@ -89,7 +89,7 @@ void PrivateCardsManager::setRelativeProbs() {
             player_card->relative_prob = oppo_prob_sum * player_card->weight;
             player_prob_sum += player_card->relative_prob;
         }
-        for(std::size_t i = 0;i < this->private_cards[player_id].size();i ++) {
+        for(std::size_t i = 0;i < this->private_cards[player_id].size();i++) {
             this->private_cards[player_id][i].relative_prob = this->private_cards[player_id][i].relative_prob / player_prob_sum;
             //player_card.relative_prob = player_card.relative_prob / player_prob_sum;
         }

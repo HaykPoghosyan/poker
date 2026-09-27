@@ -89,7 +89,6 @@ void split(const string& s, char c,
     }
 }
 
-
 void CommandLineTool::processCommand(string input) {
     vector<string> contents;
     split(input,' ',contents);
@@ -136,7 +135,7 @@ void CommandLineTool::processCommand(string input) {
 
         if(bet_type == "bet" || bet_type == "raise" || bet_type == "donk"){
             sizes->clear();
-            for(std::size_t i = 3;i < params.size();i ++ ){
+            for(std::size_t i = 3;i < params.size();i++){
                 sizes->push_back(stof(params[i]));
             }
         }

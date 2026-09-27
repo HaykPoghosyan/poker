@@ -63,7 +63,6 @@ void HtmlTableRangeView::mousePressEvent(QMouseEvent *event) {
     emit view_item_pressed(index.row(),index.column());
 }
 
-
 void HtmlTableRangeView::mouseReleaseEvent(QMouseEvent *event) {
     HtmlTableView::mouseReleaseEvent(event);
 }

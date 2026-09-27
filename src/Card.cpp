@@ -84,11 +84,11 @@ QString Card::boardCards2html(vector<Card>& cards){
 }
 
 uint64_t Card::boardInt2long(int board){
-    // 这里hard code了一副扑克牌是52张
+    // Hard-codes the assumption of a 52 card deck
     if(board < 0 || board >= 52){
         throw runtime_error(tfm::format("Card with id %s not found",board));
     }
-    // uint64_7 的range 在0 ~ + 2^ 64之间,所以不用太担心溢出问题
+    // uint64_t ranges from 0 to 2^64, so overflow is not a concern here
     return ((uint64_t)(1) << board);
 }
 
@@ -98,11 +98,11 @@ uint64_t Card::boardInts2long(const vector<int>& board){
     }
     uint64_t board_long = 0;
     for(int one_card: board){
-        // 这里hard code了一副扑克牌是52张
+        // Hard-codes the assumption of a 52 card deck
         if(one_card < 0 || one_card >= 52){
             throw runtime_error(tfm::format("Card with id %s not found",one_card));
         }
-        // uint64_7 的range 在0 ~ + 2^ 64之间,所以不用太担心溢出问题
+        // uint64_t ranges from 0 to 2^64, so overflow is not a concern here
         board_long += ((uint64_t)(1) << one_card);
     }
     return board_long;
@@ -117,8 +117,8 @@ long Card::privateHand2long(PrivateCards one_hand){
 vector<int> Card::long2board(uint64_t board_long) {
     vector<int> board;
     board.reserve(7);
-    for(int i = 0;i < 52;i ++){
-        // 看二进制最后一位是否为1
+    for(int i = 0;i < 52;i++){
+        // Check whether the lowest bit is 1
         if((board_long & 1) == 1){
             board.push_back(i);
         }
@@ -133,7 +133,7 @@ vector<int> Card::long2board(uint64_t board_long) {
 vector<Card> Card::long2boardCards(uint64_t board_long){
         vector<int> board = long2board(board_long);
         vector<Card> board_cards(board.size());
-        for(std::size_t i = 0;i < board.size();i ++){
+        for(std::size_t i = 0;i < board.size();i++){
             int one_board = board[i];
             board_cards[i] = Card(intCard2Str(one_board));
         }
@@ -141,7 +141,7 @@ vector<Card> Card::long2boardCards(uint64_t board_long){
             throw runtime_error(tfm::format("board length not correct, board length %s",board_cards.size()));
         }
         vector<Card> retval(board_cards.size());
-        for(std::size_t i = 0;i < board_cards.size();i ++){
+        for(std::size_t i = 0;i < board_cards.size();i++){
             retval[i] = board_cards[i];
         }
         return retval;
@@ -205,10 +205,10 @@ int Card::suitToInt(char suit)
 {
     switch(suit)
     {
-        case 'c': return 0; // 梅花
-        case 'd': return 1; // 方块
-        case 'h': return 2; // 红桃
-        case 's': return 3; // 黑桃
+        case 'c': return 0; // clubs
+        case 'd': return 1; // diamonds
+        case 'h': return 2; // hearts
+        case 's': return 3; // spades
         default: return 0;
     }
 }

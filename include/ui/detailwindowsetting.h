@@ -1,19 +1,5 @@
-﻿#ifndef DETAILWINDOWSETTING_H
-#define DETAILWINDOWSETTING_H
-
-class DetailWindowSetting{
-public:
-    enum DetailWindowMode{
-        RANGE_OOP,
-        RANGE_IP,
-        EV,
-        EV_ONLY,
-        STRATEGY
-    };
-    DetailWindowMode mode;
-    int grid_i = -1;
-    int grid_j = -1;
-    DetailWindowSetting();
-};
-
-#endif // DETAILWINDOWSETTING_H
+#ifndef TEXASSOLVER_SHIM_INCLUDE_UI_DETAILWINDOWSETTING_H
+#define TEXASSOLVER_SHIM_INCLUDE_UI_DETAILWINDOWSETTING_H
+// Moved next to its implementation; kept here for include-path compatibility.
+#include "src/ui/detailwindowsetting.h"
+#endif

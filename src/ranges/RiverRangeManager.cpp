@@ -56,7 +56,6 @@ RiverRangeManager::getRiverCombos(int player, const vector<PrivateCards> &preflo
     {
         PrivateCards preflopCombo = preflopCombos[hand];
 
-
         if (Card::boardsHasIntercept(
                 preflopCombo.toBoardLong(), board_long
         )){

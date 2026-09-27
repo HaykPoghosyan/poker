@@ -35,7 +35,6 @@ void DetailItemDelegate::paint_strategy(QPainter *painter, const QStyleOptionVie
             int card2 = strategy_ui_table.second;
             vector<float> strategy = detailViewerModel->tableStrategyModel->current_strategy[card1][card2];
 
-
             shared_ptr<ActionNode> actionNode = dynamic_pointer_cast<ActionNode>(node);
 
             vector<GameActions>& gameActions = actionNode->getActions();
@@ -43,7 +42,7 @@ void DetailItemDelegate::paint_strategy(QPainter *painter, const QStyleOptionVie
             float fold_prob = 0;
             vector<float> strategy_without_fold;
             float strategy_without_fold_sum = 0;
-            for(std::size_t i = 0;i < strategy.size();i ++){
+            for(std::size_t i = 0;i < strategy.size();i++){
                 GameActions one_action = gameActions[i];
                 if(one_action.getAction() == GameTreeNode::PokerActions::FOLD){
                     fold_prob = strategy[i];
@@ -53,7 +52,7 @@ void DetailItemDelegate::paint_strategy(QPainter *painter, const QStyleOptionVie
                 }
             }
 
-            for(std::size_t i = 0;i < strategy_without_fold.size();i ++){
+            for(std::size_t i = 0;i < strategy_without_fold.size();i++){
                 strategy_without_fold[i] = strategy_without_fold[i] / strategy_without_fold_sum;
             }
 
@@ -84,7 +83,7 @@ void DetailItemDelegate::paint_strategy(QPainter *painter, const QStyleOptionVie
             int ind = 0;
             float last_prob = 0;
             int bet_raise_num = 0;
-            for(std::size_t i = 0;i < strategy.size();i ++){
+            for(std::size_t i = 0;i < strategy.size();i++){
                 GameActions one_action = gameActions[i];
                 QBrush brush(Qt::gray);
                 if(one_action.getAction() != GameTreeNode::PokerActions::FOLD){
@@ -117,7 +116,7 @@ void DetailItemDelegate::paint_strategy(QPainter *painter, const QStyleOptionVie
             options.text += detailViewerModel->tableStrategyModel->cardint2card[card1].toFormattedHtml();
             options.text += detailViewerModel->tableStrategyModel->cardint2card[card2].toFormattedHtml();
             options.text = "<h2 >" + options.text + "<\/h2>";
-            for(std::size_t i = 0;i < strategy.size();i ++){
+            for(std::size_t i = 0;i < strategy.size();i++){
                 GameActions one_action = gameActions[i];
                 float one_strategy = strategy[i] * 100;
                 if(one_action.getAction() ==  GameTreeNode::PokerActions::FOLD){
@@ -237,7 +236,7 @@ void DetailItemDelegate::paint_evs(QPainter *painter, const QStyleOptionViewItem
             float fold_prob = 0;
             vector<float> strategy_without_fold;
             float strategy_without_fold_sum = 0;
-            for(std::size_t i = 0;i < strategy.size();i ++){
+            for(std::size_t i = 0;i < strategy.size();i++){
                 GameActions one_action = gameActions[i];
                 if(one_action.getAction() == GameTreeNode::PokerActions::FOLD){
                     fold_prob = strategy[i];
@@ -247,7 +246,7 @@ void DetailItemDelegate::paint_evs(QPainter *painter, const QStyleOptionViewItem
                 }
             }
 
-            for(std::size_t i = 0;i < strategy_without_fold.size();i ++){
+            for(std::size_t i = 0;i < strategy_without_fold.size();i++){
                 strategy_without_fold[i] = strategy_without_fold[i] / strategy_without_fold_sum;
             }
 
@@ -279,7 +278,7 @@ void DetailItemDelegate::paint_evs(QPainter *painter, const QStyleOptionViewItem
             int ind = 0;
             float last_prob = 0;
             int bet_raise_num = 0;
-            for(std::size_t i = 0;i < strategy.size();i ++){
+            for(std::size_t i = 0;i < strategy.size();i++){
                 GameActions one_action = gameActions[i];
                 float normalized_ev = normalization_tanh(node->getPot() * 3,evs[i]);
                 QBrush brush(Qt::gray);
@@ -321,7 +320,7 @@ void DetailItemDelegate::paint_evs(QPainter *painter, const QStyleOptionViewItem
             options.text += detailViewerModel->tableStrategyModel->cardint2card[card1].toFormattedHtml();
             options.text += detailViewerModel->tableStrategyModel->cardint2card[card2].toFormattedHtml();
             options.text = "<h2>" + options.text + "<\/h2>";
-            for(std::size_t i = 0;i < evs.size();i ++){
+            for(std::size_t i = 0;i < evs.size();i++){
                 GameActions one_action = gameActions[i];
                 QString one_ev = evs[i] != evs[i]? tr("Can't calculate"):QString::number(evs[i],'f',1);
                 QString ev_str = tr("EV");
@@ -433,7 +432,6 @@ void DetailItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
     else if(this->detailWindowSetting->mode == DetailWindowSetting::DetailWindowMode::EV_ONLY){
         this->paint_evs_only(painter,option,index);
     }
-
 
     painter->restore();
 }

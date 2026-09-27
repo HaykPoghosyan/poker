@@ -18,13 +18,13 @@
 #define BIT_SUM_0     0x5555555555555
 #define BIT_SUM_1     0x3333333333333
 
-// 牌组合的rank频数
+// Rank frequencies of a card combination
 uint64_t ranks_hash(uint64_t cards_hash) {
     cards_hash = (cards_hash & BIT_SUM_0) + ((cards_hash >> 1) & BIT_SUM_0);
     cards_hash = (cards_hash & BIT_SUM_1) + ((cards_hash >> 2) & BIT_SUM_1);
     return cards_hash;
 }
-// 牌组合是否为同花
+// Whether a card combination is a flush
 bool is_flush(uint64_t hash) {
     int cnt = (hash & SUIT_0_MASK) != 0;
     cnt += (hash & SUIT_1_MASK) != 0;
@@ -50,6 +50,7 @@ void FiveCardsStrength::convert(unordered_map<uint64_t, int>& strength_map) {
         }
     }
 }
+
 bool FiveCardsStrength::load(const char* file_path) {
     //ifstream file(file_path, ios::binary);
     /*if (!file) {
@@ -65,14 +66,14 @@ bool FiveCardsStrength::load(const char* file_path) {
     int size_key = sizeof(uint64_t), size_int = sizeof(int), val, cnt = 0;
     uint64_t key = 0;
     char* p_key = (char*)&key, * p_val = (char*)&val, * p_cnt = (char*)&cnt;
-    file.read(p_cnt, size_int);// 读取行数
+    file.read(p_cnt, size_int);// read the row count
     for (int i = 0; i < cnt; i++) {
         file.read(p_key, size_key);
         file.read(p_val, size_int);
         flush_map[key] = val;
     }
     assert(flush_map.size() == cnt);
-    file.read(p_cnt, size_int);// 读取行数
+    file.read(p_cnt, size_int);// read the row count
     for (int i = 0; i < cnt; i++) {
         file.read(p_key, size_key);
         file.read(p_val, size_int);
@@ -82,6 +83,7 @@ bool FiveCardsStrength::load(const char* file_path) {
     file.close();
     return true;
 }
+
 bool FiveCardsStrength::save(const char* file_path) {
     //qDebug() << "a";
     //sleep(10);
@@ -95,7 +97,7 @@ bool FiveCardsStrength::save(const char* file_path) {
     int size_key = sizeof(uint64_t), size_int = sizeof(int), val = flush_map.size();
     uint64_t key = 0;
     char* p_key = (char*)&key, * p_val = (char*)&val;
-    file.write(p_val, size_int);// 写入行数
+    file.write(p_val, size_int);// write the row count
     auto it = flush_map.begin(), it_end = flush_map.end();
     for (; it != it_end; it++) {
         key = it->first; val = it->second;
@@ -103,7 +105,7 @@ bool FiveCardsStrength::save(const char* file_path) {
         file.write(p_val, size_int);
     }
     val = other_map.size();
-    file.write(p_val, size_int);// 写入行数
+    file.write(p_val, size_int);// write the row count
     it = other_map.begin(), it_end = other_map.end();
     for (; it != it_end; it++) {
         key = it->first; val = it->second;
@@ -113,12 +115,14 @@ bool FiveCardsStrength::save(const char* file_path) {
     file.close();
     return true;
 }
+
 int FiveCardsStrength::operator[](uint64_t hash) {
     auto it = flush_map.find(hash);
     if (it != flush_map.end()) return it->second;
     hash = ranks_hash(hash);
     return other_map.at(hash);
 }
+
 bool FiveCardsStrength::check(unordered_map<uint64_t, int>& strength_map) {
     auto it = strength_map.begin(), it_end = strength_map.end();
     int cnt = 0;
@@ -172,7 +176,7 @@ Dic5Compairer::Dic5Compairer(string dic_dir,int lines,string dic_dir_bin):Compai
 
         this->cardslong2rank[Card::boardCards2long(cards)] = rank;
 
-        i ++;
+        i++;
         if(i % 1000 == 0) {
             //bar.update();
         }
@@ -188,7 +192,7 @@ Dic5Compairer::Dic5Compairer(string dic_dir,int lines,string dic_dir_bin):Compai
 
 Compairer::CompairResult Dic5Compairer::compairRanks(int rank_former, int rank_latter) {
     if (rank_former < rank_latter) {
-        // rank更小的牌更大，0是同花顺
+        // A smaller rank means a stronger hand, 0 being a straight flush
         return CompairResult::LARGER;
     } else if (rank_former > rank_latter) {
         return CompairResult::SMALLER;

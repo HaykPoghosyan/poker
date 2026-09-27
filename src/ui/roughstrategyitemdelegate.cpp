@@ -27,7 +27,7 @@ void RoughStrategyItemDelegate::paint_strategy(QPainter *painter, const QStyleOp
 
         QBrush brush(Qt::gray);
         int bet_raise_num = 0;
-        for(int i = 0;i <= index.column();i ++){
+        for(int i = 0;i <= index.column();i++){
             GameActions one_action = roughStrategyViewerModel->tableStrategyModel->total_strategy[i].first;
             if(one_action.getAction() == GameTreeNode::PokerActions::FOLD){
                 brush = QBrush(QColor	(0,191,255));
@@ -81,7 +81,6 @@ void RoughStrategyItemDelegate::paint_strategy(QPainter *painter, const QStyleOp
     QRect clip(0, 0, options.rect.width(), options.rect.height());
     doc.drawContents(painter, clip);
 }
-
 
 void RoughStrategyItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
     painter->save();

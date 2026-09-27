@@ -140,6 +140,5 @@ void TreeModel::setupModelData()
     this->reGenerateTreeItem(round,ti);
 }
 
-
 void TreeModel::clicked_event(const QModelIndex & index){
 }

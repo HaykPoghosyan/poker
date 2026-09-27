@@ -61,7 +61,7 @@ QVariant TreeItem::data() const
         shared_ptr<ActionNode> parentActionNode = dynamic_pointer_cast<ActionNode>(parentNode);
         vector<GameActions>& actions = parentActionNode->getActions();
         vector<shared_ptr<GameTreeNode>>& childrens = parentActionNode->getChildrens();
-        for(std::size_t i = 0;i < childrens.size();i ++){
+        for(std::size_t i = 0;i < childrens.size();i++){
             if(childrens[i] == currentNode){
                 float amount = childrens[i]->getPot() - parentNode->getPot();
                 return (parentActionNode->getPlayer() == 0 ? QObject::tr("IP "):QObject::tr("OOP ")) + \
@@ -96,7 +96,6 @@ int TreeItem::row() const
 
     return 0;
 }
-
 
 bool TreeItem::removeChild(int row)
 {

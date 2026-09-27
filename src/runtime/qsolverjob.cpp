@@ -1,6 +1,5 @@
 ﻿#include "include/runtime/qsolverjob.h"
 
-
 using namespace std;
 
 void QSolverJob:: setContext(QSTextEdit * textEdit){
@@ -65,7 +64,6 @@ void QSolverJob::loading(){
     qDebug().noquote() << tr("Loading finished. Good to go.");//.toStdString() << endl;
 }
 
-
 void QSolverJob::saving(){
     qDebug().noquote() << tr("Saving json file..");//.toStdString() << std::endl;
 
@@ -95,8 +93,8 @@ void QSolverJob::stop(){
 }
 
 void QSolverJob::solving(){
-    // TODO  为什么ui上多次求解会积累memory？哪里leak了？
-    // TODO  为什么有时候会莫名闪退？
+    // TODO: why does solving repeatedly from the ui accumulate memory? Where is the leak?
+    // TODO: why does it sometimes crash for no apparent reason?
     qDebug().noquote() << tr("Start Solving..");//.toStdString() << std::endl;
 
     if(this->mode == Mode::HOLDEM){

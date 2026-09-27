@@ -5,16 +5,16 @@ RangeSelectorTableModel::RangeSelectorTableModel(QStringList ranks,QString initi
     this->thumbnail = thumbnail;
 
     this->grids_string = vector<vector<QString>>(this->ranklist.size());
-    for(int i = 0;i < this->ranklist.size();i ++){
+    for(int i = 0;i < this->ranklist.size();i++){
         this->grids_string[i] = vector<QString>(this->ranklist.size());
-        for(int j = 0;j < this->ranklist.size();j ++){
+        for(int j = 0;j < this->ranklist.size();j++){
             this->grids_string[i][j] = this->get_ij_text(i,j);
             this->string2ij[this->get_ij_text(i,j)] = pair<int,int>(i,j);
         }
     }
 
     this->grids_float = vector<vector<float>>(this->ranklist.size());
-    for(int i = 0;i < this->ranklist.size();i ++){
+    for(int i = 0;i < this->ranklist.size();i++){
         this->grids_float[i] = vector<float>(this->ranklist.size(),0.0);
     }
     this->setRangeText(initial_board);
@@ -35,8 +35,8 @@ float RangeSelectorTableModel::getRangeAt(int i, int j){
 }
 
 void RangeSelectorTableModel::clear_range(){
-    for(int i = 0;i < this->ranklist.size();i ++){
-        for(int j = 0;j < this->ranklist.size();j ++){
+    for(int i = 0;i < this->ranklist.size();i++){
+        for(int j = 0;j < this->ranklist.size();j++){
             this->grids_float[i][j] = 0;
         }
     }
@@ -59,8 +59,8 @@ RangeSelectorTableModel::~RangeSelectorTableModel(){
 
 QString RangeSelectorTableModel::getRangeText(){
     QString retval = "";
-    for(int i = 0;i < this->ranklist.size();i ++){
-        for(int j = 0;j < this->ranklist.size();j ++){
+    for(int i = 0;i < this->ranklist.size();i++){
+        for(int j = 0;j < this->ranklist.size();j++){
             if(this->grids_float[i][j] == 0)continue;
             QString one_range_str = QString("%1:%2").arg(this->grids_string[i][j],QString::number(this->grids_float[i][j],'f',3));
             if(retval == ""){

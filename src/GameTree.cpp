@@ -78,7 +78,7 @@ shared_ptr<GameTreeNode> GameTree::__build(shared_ptr<GameTreeNode> node, Rule r
 }
 
 void GameTree::buildChance(shared_ptr<ChanceNode> root,Rule rule){
-    //节点上的下注额度
+    // Amount committed to the pot at this node
     double pot = (double)rule.get_pot();
     Rule nextrule = Rule(rule);
     if(rule.current_round > 3)throw runtime_error(tfm::format("current round not valid : %d",rule.current_round));
@@ -89,7 +89,6 @@ void GameTree::buildChance(shared_ptr<ChanceNode> root,Rule rule){
             double p1_commit = rule.ip_commit;
             double p2_commit = rule.oop_commit;
             double peace_getback = (p1_commit + p2_commit) / 2;
-
 
             vector<vector<double>> payoffs(2);
             payoffs[0] = {p2_commit, -p2_commit};
@@ -139,11 +138,11 @@ void GameTree::buildAction(shared_ptr<ActionNode> root,Rule rule,string last_act
     if (possible_actions.empty()) return;
     for (string action : possible_actions) {
         if (action == "check") {
-            // 当不是第一轮的时候 call后面是不能跟check的
+            // Outside of the first round, a call cannot be followed by a check
             shared_ptr<GameTreeNode> nextnode;
             Rule nextrule = Rule(rule);
             if ((last_action == "call" && root->getParent() != nullptr && root->getParent()->getParent() == nullptr) || check_times >= 1) {
-                // 在river check 导致游戏进入showdown
+                // A check on the river takes the game to showdown
                 if(rule.current_round == 3){
                     double p1_commit = rule.ip_commit;
                     double p2_commit = rule.oop_commit;
@@ -154,7 +153,7 @@ void GameTree::buildAction(shared_ptr<ActionNode> root,Rule rule,string last_act
                     vector<double> peace_getback_vec = {peace_getback - p1_commit, peace_getback - p2_commit};
                     nextnode = make_shared<ShowdownNode>(peace_getback_vec,payoffs,GameTreeNode::intToGameRound(rule.current_round),(double)rule.get_pot(),root);
                 }else {
-                    // 在preflop/flop/turn check 导致游戏进入下一轮
+                    // A check on preflop/flop/turn takes the game to the next round
                     nextrule.current_round += 1;
                     nextnode = make_shared<ChanceNode>(nullptr,GameTreeNode::intToGameRound(rule.current_round + 1), rule.get_pot(), root, this->deck.getCards());
                 }
@@ -217,10 +216,10 @@ void GameTree::buildAction(shared_ptr<ActionNode> root,Rule rule,string last_act
             if(last_action == "call"){
                 if(!(root->getParent() != nullptr && root->getParent()->getParent() == nullptr)) continue;
             }else if(last_action == "check"){
-                // 第二轮之后的check后面只能跟 bet
+                // After the first round, a check can only be followed by a bet
                 if(!(root->getParent() != nullptr && root->getParent()->getParent() == nullptr && rule.current_round == 0)) continue;
             }
-            // 如果raise次数超出限制，则不可以继续raise
+            // No further raises once the raise limit is reached
             if(raise_times >= rule.raise_limit) continue;
             vector<double> bet_sizes = this->get_possible_bets(root,player,nextplayer,rule,BetType::RAISE);
             for(double one_betting_size:bet_sizes){
@@ -318,9 +317,9 @@ shared_ptr<GameTreeNode> GameTree::recurrentGenerateTreeNode(json node_json, con
     }
 
     if(node_type == "Action") {
-        // 孩子节点的动作，存在list里
+        // Actions leading to the child nodes, stored as a list
         auto childrens_actions = node_json["children_actions"].get<std::vector<string>>();
-        // 孩子节点本身，同样存在list里,和上面的children_actions 一一对应,事实上两者的长度一致
+        // The child nodes themselves, also a list, matching children_actions one to one, so both have the same length
         vector<json> childrens = node_json["children"].get<std::vector<json>>();
         if (childrens.size() != childrens_actions.size()) {
             throw runtime_error("action node child length mismatch");
@@ -367,7 +366,7 @@ GameTree::generateActionNode(json meta, vector<string> childrens_actions, vector
     vector<GameActions> actions;
     vector<shared_ptr<GameTreeNode>> childrens;
 
-    // 遍历所有children actions 来生成GameAction 的list，用于初始化ActionNode
+    // Walk all children actions to build the GameAction list used to initialize the ActionNode
     for(std::size_t i = 0;i < childrens_actions.size();i++){
         string one_action = childrens_actions[i];
         json one_children_map = childrens_nodes[i];
@@ -431,7 +430,7 @@ GameTree::generateActionNode(json meta, vector<string> childrens_actions, vector
 
 shared_ptr<ChanceNode>
 GameTree::generateChanceNode(json meta, const json& child, string round, shared_ptr<GameTreeNode> parent) {
-    //节点上的下注额度
+    // Amount committed to the pot at this node
     double pot = meta["pot"];
     shared_ptr<GameTreeNode> one_child = recurrentGenerateTreeNode(child, nullptr);
     GameTreeNode::GameRound game_round = strToGameRound(std::move(round));
@@ -445,7 +444,7 @@ shared_ptr<ShowdownNode> GameTree::generateShowdownNode(json meta, string round,
     json meta_payoffs = meta["payoffs"];
     vector<double> tie_payoffs = meta_payoffs["tie"];
 
-    // meta_payoffs 的key有 n个玩家+1个平局,代表某个玩家赢了的时候如何分配payoff
+    // meta_payoffs is keyed by the n players plus one tie entry, describing how the payoff is split when a given player wins
     vector<vector<double>> player_payoffs(2);
     double pot = meta["pot"];
 
@@ -454,11 +453,11 @@ shared_ptr<ShowdownNode> GameTree::generateShowdownNode(json meta, string round,
         if(one_player == "tie"){
             continue;
         }
-        // 获胜玩家id
+        // Id of the winning player
         int player_id = atoi(one_player.c_str());
         if(player_id < 0 or player_id > 1) throw runtime_error("player id json convert fail");
 
-        // 玩家在当前Showdown节点能获得的收益
+        // Payoff the player collects at this showdown node
         //List<Object> tmp_payoffs =  (List<Object>)meta_payoffs.get(one_player);
         vector<double> player_payoff = one_player_meta.value();
 
@@ -471,17 +470,17 @@ shared_ptr<ShowdownNode> GameTree::generateShowdownNode(json meta, string round,
 shared_ptr<TerminalNode> GameTree::generateTerminalNode(json meta, string round, shared_ptr<GameTreeNode> parent) {
     vector<double> player_payoff_list = meta["payoff"];
     vector<double> player_payoff(player_payoff_list.size());
-    for(std::size_t one_player = 0;one_player < player_payoff_list.size();one_player ++){
+    for(std::size_t one_player = 0;one_player < player_payoff_list.size();one_player++){
 
         double tmp_payoff = player_payoff_list[one_player];
         player_payoff[one_player] = tmp_payoff;
     }
 
-    //节点上的下注额度
+    // Amount committed to the pot at this node
     double pot = meta["pot"];
 
     GameTreeNode::GameRound game_round = this->strToGameRound(std::move(round));
-    // 多人游戏的时候winner就不等于当前节点的玩家了，这里要注意
+    // Careful: in a multiway game the winner is no longer the player at this node
     int player = meta["player"];
 
     return make_shared<TerminalNode>(player_payoff,player,game_round,pot,parent);
@@ -653,11 +652,11 @@ vector<double> GameTree::get_possible_bets(shared_ptr<ActionNode> root, int play
     for(double one_bet: bets_ratios){
         double amount;
         if(rule.oop_commit == rule.small_blind){
-            // 当德州扑克开始时，在第一个玩家动作时（sb位置玩家）,视作对手先下注一个bb,这个时候下注要扣除自己的sb
+            // At the start of a hold'em hand the first player to act (the small blind) faces what counts as an opponent bet of one big blind, so the bet has to be reduced by the small blind already posted
             amount = one_bet * rule.big_blind  - rule.small_blind;
             amount = this->round_nearest(amount, (double) rule.small_blind);
         }else if(rule.ip_commit == rule.big_blind && rule.oop_commit == rule.big_blind){
-            // 当德州扑克开始时，在第一个玩家call 的时候第二个玩家要 raise的时候,需要特殊处理
+            // Special case at the start of a hold'em hand: the first player calls and the second player raises
             amount = one_bet * rule.big_blind;
             amount = this->round_nearest(amount, (double) rule.small_blind);
         }else{
@@ -678,7 +677,7 @@ vector<double> GameTree::get_possible_bets(shared_ptr<ActionNode> root, int play
     if(all_in) possible_amounts.push_back((double) (rule.stack - rule.get_commit(player)));
 
     if (rule.get_commit(player) != rule.small_blind){
-        // 一开始的possible bet amount不能简单取整
+        // The initial possible bet amounts cannot simply be truncated to integers
         vector<double> tmp_vector;
         for(double val:possible_amounts){
             if(val > 0)tmp_vector.push_back(int(val));

@@ -112,7 +112,7 @@ StrategyExplorer::~StrategyExplorer()
 void StrategyExplorer::item_expanded(const QModelIndex& index){
     TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
     int num_child = item->childCount();
-    for (int i = 0;i < num_child;i ++){
+    for (int i = 0;i < num_child;i++){
         TreeItem* one_child = item->child(i);
         if(one_child->childCount() != 0)continue;
         this->ui->gameTreeView->tree_model->reGenerateTreeItem(one_child->m_treedata.lock()->getRound(),one_child);
@@ -220,7 +220,6 @@ void StrategyExplorer::update_second(){
     this->ui->strategyTableView->viewport()->update();
     this->ui->detailView->viewport()->update();
 }
-
 
 void StrategyExplorer::onMouseMoveEvent(int i,int j){
     this->detailWindowSetting.grid_i = i;

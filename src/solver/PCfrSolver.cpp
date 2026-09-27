@@ -83,10 +83,10 @@ const vector<PrivateCards> &PCfrSolver::playerHands(int player) {
 
 vector<vector<float>> PCfrSolver::getReachProbs() {
     vector<vector<float>> retval(this->player_number);
-    for(int player = 0;player < this->player_number;player ++){
+    for(int player = 0;player < this->player_number;player++){
         vector<PrivateCards> player_cards = this->playerHands(player);
         vector<float> reach_prob(player_cards.size());
-        for(std::size_t i = 0;i < player_cards.size();i ++){
+        for(std::size_t i = 0;i < player_cards.size();i++){
             reach_prob[i] = player_cards[i].weight;
         }
         retval[player] = reach_prob;
@@ -166,7 +166,7 @@ vector<int> PCfrSolver::getAllAbstractionDeal(int deal){
         all_deal.push_back(deal);
     } else if (deal > 0 && deal <= card_num){
         int origin_deal = int((deal - 1) / 4) * 4;
-        for(int i = 0;i < 4;i ++){
+        for(int i = 0;i < 4;i++){
             int one_card = origin_deal + i + 1;
 
             Card *first_card = const_cast<Card *>(&(this->deck.getCards()[origin_deal + i]));
@@ -181,8 +181,8 @@ vector<int> PCfrSolver::getAllAbstractionDeal(int deal){
         int first_deal = int((c_deal / card_num) / 4) * 4;
         int second_deal = int((c_deal % card_num) / 4) * 4;
 
-        for(int i = 0;i < 4;i ++) {
-            for(int j = 0;j < 4;j ++) {
+        for(int i = 0;i < 4;i++) {
+            for(int j = 0;j < 4;j++) {
                 if(first_deal == second_deal && i == j) continue;
 
                 Card *first_card = const_cast<Card *>(&(this->deck.getCards()[first_deal + i]));
@@ -233,7 +233,7 @@ PCfrSolver::chanceUtility(int player, shared_ptr<ChanceNode> node, const vector<
 
     int card_num = node->getCards().size();
     if(card_num % 4 != 0) throw runtime_error("card num cannot round 4");
-    // 可能的发牌情况,2代表每个人的holecard是两张
+    // Number of possible deals, the 2 accounts for each player holding two hole cards
     int possible_deals = node->getCards().size() - Card::long2board(current_board).size() - 2;
     int oppo = 1 - player;
 
@@ -288,7 +288,7 @@ PCfrSolver::chanceUtility(int player, shared_ptr<ChanceNode> node, const vector<
     vector<int> valid_cards;
     valid_cards.reserve(node->getCards().size());
 
-    for(std::size_t card = 0;card < node->getCards().size();card ++) {
+    for(std::size_t card = 0;card < node->getCards().size();card++) {
         shared_ptr<GameTreeNode> one_child = node->getChildren();
         Card *one_card = const_cast<Card *>(&(node->getCards()[card]));
         uint64_t card_long = Card::boardInt2long(one_card->getCardInt());//Card::boardCards2long(new Card[]{one_card});
@@ -315,10 +315,7 @@ PCfrSolver::chanceUtility(int player, shared_ptr<ChanceNode> node, const vector<
         vector<PrivateCards> &playerPrivateCard = (this->ranges[player]);
         vector<PrivateCards> &oppoPrivateCards = (this->ranges[1 - player]);
 
-
         vector<float> new_reach_probs = vector<float>(oppoPrivateCards.size());
-
-
 
 #ifdef DEBUG
         if (playerPrivateCard.size() != this->ranges[player].size()) throw runtime_error("length not match");
@@ -363,7 +360,7 @@ PCfrSolver::chanceUtility(int player, shared_ptr<ChanceNode> node, const vector<
         }
     }
 
-    for(std::size_t card = 0;card < node->getCards().size();card ++) {
+    for(std::size_t card = 0;card < node->getCards().size();card++) {
         Card *one_card = const_cast<Card *>(&(node->getCards()[card]));
         vector<float> child_utility;
         int offset = this->color_iso_offset[deal][one_card->getCardInt() % 4];
@@ -447,7 +444,7 @@ PCfrSolver::actionUtility(int player, shared_ptr<ActionNode> node, const vector<
     }
 #endif
 
-    //为了节省计算成本将action regret 存在一位数组而不是二维数组中，两个纬度分别是（该infoset有多少动作,该palyer有多少holecard）
+    // To save on computation the action regrets are kept in a flat array rather than a two dimensional one, the two dimensions being (actions at this infoset, hole cards of this player)
     vector<float> regrets(actions.size() * node_player_private_cards.size());
 
     vector<vector<float>> all_action_utility(actions.size());
@@ -481,7 +478,7 @@ PCfrSolver::actionUtility(int player, shared_ptr<ActionNode> node, const vector<
         }
         all_action_utility[action_id] = action_utilities;
 
-        // cfr结果是每手牌的收益，payoffs代表的也是每手牌的收益，他们的长度理应相等
+        // The cfr result is the payoff per hand, and payoffs holds the same, so their lengths must match
 #ifdef DEBUG
         if (action_utilities.size() != payoffs.size()) {
             cout << ("errmsg") << endl;
@@ -506,12 +503,11 @@ PCfrSolver::actionUtility(int player, shared_ptr<ActionNode> node, const vector<
         }
     }
 
-
     if (player == node->getPlayer()) {
         for (std::size_t i = 0; i < node_player_private_cards.size(); i++) {
             //boolean regrets_all_negative = true;
             for (std::size_t action_id = 0; action_id < actions.size(); action_id++) {
-                // 下面是regret计算的伪代码
+                // Pseudo code for the regret calculation below
                 // regret[action_id * player_hc: (action_id + 1) * player_hc]
                 //     = all_action_utilitiy[action_id] - payoff[action_id]
                 regrets[action_id * node_player_private_cards.size() + i] =
@@ -549,7 +545,7 @@ PCfrSolver::actionUtility(int player, shared_ptr<ActionNode> node, const vector<
             fill(oppo_card_sum.begin(),oppo_card_sum.end(),0);
 
             const vector<PrivateCards>& oppo_hand = playerHands(oppo);
-            for(std::size_t i = 0;i < oppo_hand.size();i ++){
+            for(std::size_t i = 0;i < oppo_hand.size();i++){
                 oppo_card_sum[oppo_hand[i].card1] += reach_probs[i];
                 oppo_card_sum[oppo_hand[i].card2] += reach_probs[i];
                 oppo_sum += reach_probs[i];
@@ -591,7 +587,7 @@ PCfrSolver::actionUtility(int player, shared_ptr<ActionNode> node, const vector<
 vector<float>
 PCfrSolver::showdownUtility(int player, shared_ptr<ShowdownNode> node, const vector<float> &reach_probs,
                            int iter, uint64_t current_board,int deal) {
-    // player win时候player的收益，player lose的时候收益明显为-player_payoff
+    // Payoff for the player when they win, when they lose it is simply -player_payoff
     int oppo = 1 - player;
     float win_payoff = node->get_payoffs(ShowdownNode::ShowDownResult::NOTTIE,player,player);
     float lose_payoff = node->get_payoffs(ShowdownNode::ShowDownResult::NOTTIE,oppo,player);
@@ -608,14 +604,14 @@ PCfrSolver::showdownUtility(int player, shared_ptr<ShowdownNode> node, const vec
     fill(card_winsum.begin(),card_winsum.end(),0);
 
     int j = 0;
-    for(std::size_t i = 0;i < player_combs.size();i ++){
+    for(std::size_t i = 0;i < player_combs.size();i++){
         const RiverCombs& one_player_comb = player_combs[i];
         while (j < oppo_combs.size() && one_player_comb.rank < oppo_combs[j].rank){
             const RiverCombs& one_oppo_comb = oppo_combs[j];
             winsum += reach_probs[one_oppo_comb.reach_prob_index];
             card_winsum[one_oppo_comb.private_cards.card1] += reach_probs[one_oppo_comb.reach_prob_index];
             card_winsum[one_oppo_comb.private_cards.card2] += reach_probs[one_oppo_comb.reach_prob_index];
-            j ++;
+            j++;
         }
         payoffs[one_player_comb.reach_prob_index] = (winsum
                                                      - card_winsum[one_player_comb.private_cards.card1]
@@ -623,20 +619,20 @@ PCfrSolver::showdownUtility(int player, shared_ptr<ShowdownNode> node, const vec
                                                     ) * win_payoff;
     }
 
-    // 计算失败时的payoff
+    // Compute the payoff when losing
     float losssum = 0;
     vector<float>& card_losssum = card_winsum;
     fill(card_losssum.begin(),card_losssum.end(),0);
 
     j = oppo_combs.size() - 1;
-    for(int i = player_combs.size() - 1;i >= 0;i --){
+    for(int i = player_combs.size() - 1;i >= 0;i--){
         const RiverCombs& one_player_comb = player_combs[i];
         while (j >= 0 && one_player_comb.rank > oppo_combs[j].rank){
             const RiverCombs& one_oppo_comb = oppo_combs[j];
             losssum += reach_probs[one_oppo_comb.reach_prob_index];
             card_losssum[one_oppo_comb.private_cards.card1] += reach_probs[one_oppo_comb.reach_prob_index];
             card_losssum[one_oppo_comb.private_cards.card2] += reach_probs[one_oppo_comb.reach_prob_index];
-            j --;
+            j--;
         }
         payoffs[one_player_comb.reach_prob_index] += (losssum
                                                       - card_losssum[one_player_comb.private_cards.card1]
@@ -661,13 +657,13 @@ PCfrSolver::terminalUtility(int player, shared_ptr<TerminalNode> node, const vec
     vector<float> oppo_card_sum = vector<float> (52);
     fill(oppo_card_sum.begin(),oppo_card_sum.end(),0);
 
-    for(std::size_t i = 0;i < oppo_hand.size();i ++){
+    for(std::size_t i = 0;i < oppo_hand.size();i++){
         oppo_card_sum[oppo_hand[i].card1] += reach_prob[i];
         oppo_card_sum[oppo_hand[i].card2] += reach_prob[i];
         oppo_sum += reach_prob[i];
     }
 
-    for(std::size_t i = 0;i < player_hand.size();i ++){
+    for(std::size_t i = 0;i < player_hand.size();i++){
         const PrivateCards& one_player_hand = player_hand[i];
         if(Card::boardsHasIntercept(current_board,Card::boardInts2long(one_player_hand.get_hands()))){
             continue;
@@ -692,12 +688,12 @@ PCfrSolver::terminalUtility(int player, shared_ptr<TerminalNode> node, const vec
 void PCfrSolver::findGameSpecificIsomorphisms() {
     // hand isomorphisms
     vector<Card> board_cards = Card::long2boardCards(this->initial_board_long);
-    for(int i = 0;i <= 1;i ++){
+    for(int i = 0;i <= 1;i++){
         vector<PrivateCards>& range = i == 0?this->range1:this->range2;
-        for(std::size_t i_range = 0;i_range < range.size();i_range ++) {
+        for(std::size_t i_range = 0;i_range < range.size();i_range++) {
             PrivateCards one_range = range[i_range];
             uint32_t range_hash[4]; // four colors, hash of the isomorphisms range + hand combos
-            for(int i = 0;i < 4;i ++)range_hash[i] = 0;
+            for(int i = 0;i < 4;i++)range_hash[i] = 0;
             for (int color = 0; color < 4; color++) {
                 for (Card one_card:board_cards) {
                     if (one_card.getCardInt() % 4 == color) {
@@ -718,24 +714,24 @@ void PCfrSolver::findGameSpecificIsomorphisms() {
 
     // chance node isomorphisms
     uint16_t color_hash[4];
-    for(int i = 0;i < 4;i ++)color_hash[i] = 0;
+    for(int i = 0;i < 4;i++)color_hash[i] = 0;
     for (Card one_card:board_cards) {
         int rankind = one_card.getCardInt() % 4;
         int suitind = one_card.getCardInt() / 4;
         color_hash[rankind] = color_hash[rankind] | (1 << suitind);
     }
-    for(int i = 0;i < 4;i ++){
+    for(int i = 0;i < 4;i++){
         this->color_iso_offset[0][i] = 0;
-        for(int j = 0;j < i;j ++){
+        for(int j = 0;j < i;j++){
             if(color_hash[i] == color_hash[j]){
                 this->color_iso_offset[0][i] = j - i;
                 continue;
             }
         }
     }
-    for(std::size_t deal = 0;deal < this->deck.getCards().size();deal ++) {
+    for(std::size_t deal = 0;deal < this->deck.getCards().size();deal++) {
         uint16_t color_hash[4];
-        for(int i = 0;i < 4;i ++)color_hash[i] = 0;
+        for(int i = 0;i < 4;i++)color_hash[i] = 0;
         // chance node isomorphisms
         for (Card one_card:board_cards) {
             int rankind = one_card.getCardInt() % 4;
@@ -787,7 +783,7 @@ void PCfrSolver::train() {
     uint64_t endtime = timeSinceEpochMillisec();
 
     for(int i = 0;i < this->iteration_number;i++){
-        for(int player_id = 0;player_id < this->player_number;player_id ++) {
+        for(int player_id = 0;player_id < this->player_number;player_id++) {
             this->round_deal = vector<int>{-1,-1,-1,-1};
             //#pragma omp parallel
             {
@@ -825,7 +821,7 @@ void PCfrSolver::train() {
 
     qDebug().noquote() << QObject::tr("collecting statics");
     this->collecting_statics = true;
-    for(int player_id = 0;player_id < this->player_number;player_id ++) {
+    for(int player_id = 0;player_id < this->player_number;player_id++) {
         this->round_deal = vector<int>{-1,-1,-1,-1};
         //#pragma omp parallel
         {
@@ -853,7 +849,7 @@ void PCfrSolver::exchangeRange(json& strategy,int rank1,int rank2,shared_ptr<Act
     vector<string> range_strs;
     vector<vector<float>> strategies;
 
-    for(std::size_t i = 0;i < this->ranges[player].size();i ++){
+    for(std::size_t i = 0;i < this->ranges[player].size();i++){
         string one_range_str = this->ranges[player][i].toString();
         if(!strategy.contains(one_range_str)){
             for(auto one_key:strategy.items()){
@@ -868,7 +864,7 @@ void PCfrSolver::exchangeRange(json& strategy,int rank1,int rank2,shared_ptr<Act
     }
     exchange_color(strategies,this->ranges[player],rank1,rank2);
 
-    for(std::size_t i = 0;i < this->ranges[player].size();i ++) {
+    for(std::size_t i = 0;i < this->ranges[player].size();i++) {
         string one_range_str = this->ranges[player][i].toString();
         vector<float> one_strategy = strategies[i];
         strategy[one_range_str] = one_strategy;
@@ -897,7 +893,7 @@ void PCfrSolver::reConvertJson(const shared_ptr<GameTreeNode>& node,json& strate
         (*retval)["childrens"] = json();
         json& childrens = (*retval)["childrens"];
 
-        for(std::size_t i = 0;i < one_node->getActions().size();i ++){
+        for(std::size_t i = 0;i < one_node->getActions().size();i++){
             GameActions& one_action = one_node->getActions()[i];
             shared_ptr<GameTreeNode> one_child = one_node->getChildrens()[i];
             vector<string> new_prefix(prefix);
@@ -938,7 +934,7 @@ void PCfrSolver::reConvertJson(const shared_ptr<GameTreeNode>& node,json& strate
             card_strs.push_back(card.toString());
 
         json& dealcards = (*retval)["dealcards"];
-        for(std::size_t i = 0;i < cards.size();i ++){
+        for(std::size_t i = 0;i < cards.size();i++){
             vector<vector<int>> new_exchange_color_list(exchange_color_list);
             Card& one_card = const_cast<Card &>(cards[i]);
             vector<string> new_prefix(prefix);
@@ -948,7 +944,7 @@ void PCfrSolver::reConvertJson(const shared_ptr<GameTreeNode>& node,json& strate
 
             int offset = this->color_iso_offset[deal][one_card.getCardInt() % 4];
             if(offset < 0) {
-                for(std::size_t x = 0;x < cards.size();x ++){
+                for(std::size_t x = 0;x < cards.size();x++){
                     if(
                             Card::card2int(cards[x]) ==
                             (Card::card2int(cards[card]) + offset)
@@ -1015,9 +1011,9 @@ vector<vector<vector<float>>> PCfrSolver::get_strategy(shared_ptr<ActionNode> no
     vector<vector<int>> exchange_color_list;
 
     vector<vector<vector<float>>> ret_strategy = vector<vector<vector<float>>>(52);
-    for(int i = 0;i < 52;i ++){
+    for(int i = 0;i < 52;i++){
         ret_strategy[i] = vector<vector<float>>(52);
-        for(int j = 0;j < 52;j ++){
+        for(int j = 0;j < 52;j++){
             ret_strategy[i][j] = vector<float>();
         }
     }
@@ -1028,7 +1024,7 @@ vector<vector<vector<float>>> PCfrSolver::get_strategy(shared_ptr<ActionNode> no
         int card = one_card.getNumberInDeckInt();
         int offset = this->color_iso_offset[deal][one_card.getCardInt() % 4];
         if(offset < 0) {
-            for(std::size_t x = 0;x < cards.size();x ++){
+            for(std::size_t x = 0;x < cards.size();x++){
                 if(
                     Card::card2int(cards[x]) ==
                     (Card::card2int(cards[card]) + offset)
@@ -1068,7 +1064,7 @@ vector<vector<vector<float>>> PCfrSolver::get_strategy(shared_ptr<ActionNode> no
     int player = node->getPlayer();
 
     json& strategy = retjson["strategy"];
-    for(std::size_t i = 0;i < this->ranges[player].size();i ++){
+    for(std::size_t i = 0;i < this->ranges[player].size();i++){
         PrivateCards pc = this->ranges[player][i];
         string one_range_str = pc.toString();
         if(!strategy.contains(one_range_str)){
@@ -1099,9 +1095,9 @@ vector<vector<vector<float>>> PCfrSolver::get_evs(shared_ptr<ActionNode> node,ve
     vector<vector<int>> exchange_color_list;
 
     vector<vector<vector<float>>> ret_evs = vector<vector<vector<float>>>(52);
-    for(int i = 0;i < 52;i ++){
+    for(int i = 0;i < 52;i++){
         ret_evs[i] = vector<vector<float>>(52);
-        for(int j = 0;j < 52;j ++){
+        for(int j = 0;j < 52;j++){
             ret_evs[i][j] = vector<float>();
         }
     }
@@ -1112,7 +1108,7 @@ vector<vector<vector<float>>> PCfrSolver::get_evs(shared_ptr<ActionNode> node,ve
         int card = one_card.getNumberInDeckInt();
         int offset = this->color_iso_offset[deal][one_card.getCardInt() % 4];
         if(offset < 0) {
-            for(std::size_t x = 0;x < cards.size();x ++){
+            for(std::size_t x = 0;x < cards.size();x++){
                 if(
                     Card::card2int(cards[x]) ==
                     (Card::card2int(cards[card]) + offset)
@@ -1152,7 +1148,7 @@ vector<vector<vector<float>>> PCfrSolver::get_evs(shared_ptr<ActionNode> node,ve
     int player = node->getPlayer();
 
     json& evs = retjson["evs"];
-    for(std::size_t i = 0;i < this->ranges[player].size();i ++){
+    for(std::size_t i = 0;i < this->ranges[player].size();i++){
         PrivateCards pc = this->ranges[player][i];
         string one_range_str = pc.toString();
         if(!evs.contains(one_range_str)){

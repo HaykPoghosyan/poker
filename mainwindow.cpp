@@ -411,7 +411,7 @@ void MainWindow::on_ip_range(QString range_text){
 }
 
 void MainWindow::on_buttomSolve_clicked()
-{   
+{
     qSolverJob->max_iteration = ui->iterationText->text().toInt();
     qSolverJob->accuracy = ui->exploitabilityText->text().toFloat();
     qSolverJob->print_interval = ui->logIntervalText->text().toInt();
@@ -565,14 +565,14 @@ float iso_corh(QString board){
     }
     float corh = 1;
     uint16_t color_hash[4];
-    for(int i = 0;i < 4;i ++)color_hash[i] = 0;
+    for(int i = 0;i < 4;i++)color_hash[i] = 0;
     for (Card one_card:initialBoard) {
         int rankind = one_card.getCardInt() % 4;
         int suitind = one_card.getCardInt() / 4;
         color_hash[rankind] = color_hash[rankind] | (1 << suitind);
     }
-    for(int i = 0;i < 4;i ++){
-        for(int j = 0;j < i;j ++){
+    for(int i = 0;i < 4;i++){
+        for(int j = 0;j < i;j++){
             if(color_hash[i] == color_hash[j]){
                 corh = corh * 0.70;
                 continue;
