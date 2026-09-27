@@ -3,11 +3,10 @@
 //
 
 #include "include/solver/BestResponse.h"
+#include <cassert>
 #include <QtCore>
 #include <QObject>
 #include <QTranslator>
-
-//#define DEBUG;
 
 BestResponse::BestResponse(vector<vector<PrivateCards>>& private_combos, int player_number, PrivateCardsManager& pcm,
                            RiverRangeManager& rrm, Deck& deck, bool debug, int color_iso_offset[][4],
@@ -16,11 +15,8 @@ BestResponse::BestResponse(vector<vector<PrivateCards>>& private_combos, int pla
     this->player_number = player_number;
     this->debug = debug;
 
-#ifdef DEBUG
-    if (private_combos.size() != player_number)
-        throw runtime_error(
-            tfm::format("river combo length NE player nunber: %s -- %s", private_combos.size(), player_number));
-#endif
+    assert(private_combos.size() == static_cast<std::size_t>(player_number) &&
+           "river combo length not equal to player number");
     player_hands = vector<int>(player_number);
     for (int i = 0; i < player_number; i++) {
         player_hands[i] = private_combos[i].size();
@@ -160,16 +156,9 @@ vector<float> BestResponse::chanceBestReponse(shared_ptr<ChanceNode> node, int p
 
         //new_reach_probs[player] = new float[playerPrivateCard.length];
 
-#ifdef DEBUG
-        if (reach_probs[player].size() != playerPrivateCard.size())
-            throw runtime_error("length mismatch");
-
         // Check that the hand and reach prob lengths line up for both players
-        if (playerPrivateCard.size() != reach_probs[player].size())
-            throw runtime_error("length not match1 ");
-        if (oppoPrivateCards.size() != reach_probs[1 - player].size())
-            throw runtime_error("length not match2 ");
-#endif
+        assert(playerPrivateCard.size() == reach_probs[player].size() && "length not match1");
+        assert(oppoPrivateCards.size() == reach_probs[1 - player].size() && "length not match2");
 
         for (int one_player = 0; one_player < 2; one_player++) {
             int player_hand_len = this->pcm.getPreflopCards(one_player).size();
@@ -183,10 +172,7 @@ vector<float> BestResponse::chanceBestReponse(shared_ptr<ChanceNode> node, int p
             }
         }
 
-#ifdef DEBUG
-        if (Card::boardsHasIntercept(current_board, card_long))
-            throw runtime_error("board has intercept with dealt card");
-#endif
+        assert(!Card::boardsHasIntercept(current_board, card_long) && "board has intercept with dealt card");
         uint64_t new_board_long = current_board | card_long;
 
         int new_deal;
@@ -194,10 +180,7 @@ vector<float> BestResponse::chanceBestReponse(shared_ptr<ChanceNode> node, int p
             new_deal = card + 1;
         } else if (deal > 0 && deal <= card_num) {
             int origin_deal = deal - 1;
-#ifdef DEBUG
-            if (origin_deal == card)
-                throw runtime_error("deal should not be equal");
-#endif
+            assert(origin_deal != card && "deal should not be equal");
             new_deal = card_num * origin_deal + card;
             new_deal += (1 + card_num);
         } else {
@@ -214,10 +197,7 @@ vector<float> BestResponse::chanceBestReponse(shared_ptr<ChanceNode> node, int p
         if (offset < 0) {
             int rank1 = one_card->getCardInt() % 4;
             int rank2 = rank1 + offset;
-#ifdef DEBUG
-            if (rank2 < 0)
-                throw runtime_error("rank error");
-#endif
+            assert(rank2 >= 0 && "rank error");
             // TODO: the suits need to be swapped here based on the offset
             child_utility = results[one_card->getNumberInDeckInt() + offset];
             exchange_color(child_utility, private_combos[player], rank1, rank2);
@@ -227,10 +207,7 @@ vector<float> BestResponse::chanceBestReponse(shared_ptr<ChanceNode> node, int p
 
         if (child_utility.empty())
             continue;
-#ifdef DEBUG
-        if (child_utility.size() != chance_utility.size())
-            throw runtime_error("length not match3 ");
-#endif
+        assert(child_utility.size() == chance_utility.size() && "length not match3");
         for (std::size_t i = 0; i < child_utility.size(); i++)
             chance_utility[i] += (child_utility)[i];
     }
@@ -268,18 +245,10 @@ vector<float> BestResponse::actionBestResponse(shared_ptr<ActionNode> node, int 
         vector<float> total_payoffs = vector<float>(player_hands[player]);
         fill(total_payoffs.begin(), total_payoffs.end(), 0);
         shared_ptr<Trainable> trainable = node->getTrainable(deal, true, this->use_halffloats);
-#ifdef DEBUG
-        if (trainable == nullptr) {
-            throw runtime_error("null trainable");
-        }
-#endif
+        assert(trainable != nullptr && "null trainable");
         const vector<float>& node_strategy = trainable->getAverageStrategy();
-#ifdef DEBUG
-        if (node_strategy.size() != node->getChildrens().size() * reach_probs[node->getPlayer()].size()) {
-            throw runtime_error(tfm::format("strategy size not match %s - %s", node_strategy.size(),
-                                            node->getChildrens().size() * reach_probs[node->getPlayer()].size()));
-        }
-#endif
+        assert(node_strategy.size() == node->getChildrens().size() * reach_probs[node->getPlayer()].size() &&
+               "strategy size not match");
 
         vector<vector<vector<float>>> best_respond_arr_new_reach_probs =
             vector<vector<vector<float>>>(node->getChildrens().size());
@@ -308,17 +277,11 @@ vector<float> BestResponse::actionBestResponse(shared_ptr<ActionNode> node, int 
 
             shared_ptr<GameTreeNode> one_child = node->getChildrens()[action_ind];
 
-#ifdef DEBUG
-            if (one_child == nullptr)
-                throw runtime_error("child node not found");
-#endif
+            assert(one_child != nullptr && "child node not found");
             const vector<float>& action_payoffs = this->bestResponse(one_child, player, next_reach_probs, board, deal);
 
-#ifdef DEBUG
-            if (action_payoffs.size() != total_payoffs.size())
-                throw runtime_error(tfm::format("length not match between action payoffs and total payoffs %s -- %s",
-                                                action_payoffs.size(), total_payoffs.size()));
-#endif
+            assert(action_payoffs.size() == total_payoffs.size() &&
+                   "length not match between action payoffs and total payoffs");
 
             for (std::size_t i = 0; i < total_payoffs.size(); i++) {
                 total_payoffs[i] += action_payoffs
@@ -347,10 +310,7 @@ vector<float> BestResponse::terminalBestReponse(shared_ptr<TerminalNode> node, i
 
     vector<float> payoffs = vector<float>(this->player_hands[player]);
 
-#ifdef DEBUG
-    if (this->player_number != 2)
-        throw runtime_error("player NE 2 not supported");
-#endif
+    assert(this->player_number == 2 && "player number other than 2 not supported");
     // The opponent's hands may need to be as long as their reach probs
     vector<float> oppo_card_sum(52);
 
@@ -401,10 +361,7 @@ vector<float> BestResponse::terminalBestReponse(shared_ptr<TerminalNode> node, i
 
 vector<float> BestResponse::showdownBestResponse(shared_ptr<ShowdownNode> node, int player,
                                                  const vector<vector<float>>& reach_probs, uint64_t board, int deal) {
-#ifdef DEBUG
-    if (this->player_number != 2)
-        throw runtime_error("player number is not 2");
-#endif
+    assert(this->player_number == 2 && "player number is not 2");
 
     int oppo = 1 - player;
     const vector<RiverCombs>& player_combs =

@@ -4,11 +4,10 @@
 
 #include <include/solver/BestResponse.h>
 #include "include/solver/PCfrSolver.h"
+#include <cassert>
 #include <QtCore>
 #include <QObject>
 #include <QTranslator>
-
-//#define DEBUG;
 
 PCfrSolver::~PCfrSolver() {
     //cout << "Pcfr destroyed" << endl;
@@ -322,12 +321,8 @@ vector<float> PCfrSolver::chanceUtility(int player, shared_ptr<ChanceNode> node,
 
         vector<float> new_reach_probs = vector<float>(oppoPrivateCards.size());
 
-#ifdef DEBUG
-        if (playerPrivateCard.size() != this->ranges[player].size())
-            throw runtime_error("length not match");
-        if (oppoPrivateCards.size() != this->ranges[1 - player].size())
-            throw runtime_error("length not match");
-#endif
+        assert(playerPrivateCard.size() == this->ranges[player].size() && "length not match");
+        assert(oppoPrivateCards.size() == this->ranges[1 - player].size() && "length not match");
 
         int player_hand_len = this->ranges[oppo].size();
         for (int player_hand = 0; player_hand < player_hand_len; player_hand++) {
@@ -339,10 +334,7 @@ vector<float> PCfrSolver::chanceUtility(int player, shared_ptr<ChanceNode> node,
             }
             new_reach_probs[player_hand] = reach_probs[player_hand] / possible_deals;
         }
-#ifdef DEBUG
-        if (Card::boardsHasIntercept(current_board, card_long))
-            throw runtime_error("board has intercept with dealt card");
-#endif
+        assert(!Card::boardsHasIntercept(current_board, card_long) && "board has intercept with dealt card");
 
         int new_deal;
         if (deal == 0) {
@@ -350,10 +342,8 @@ vector<float> PCfrSolver::chanceUtility(int player, shared_ptr<ChanceNode> node,
         } else if (deal > 0 && deal <= card_num) {
             int origin_deal = deal - 1;
 
-#ifdef DEBUG
-            if (origin_deal == card)
-                throw runtime_error("deal should not be equal");
-#endif
+            assert(origin_deal != card);
+
             new_deal = card_num * origin_deal + card;
             new_deal += (1 + card_num);
         } else {
@@ -375,10 +365,7 @@ vector<float> PCfrSolver::chanceUtility(int player, shared_ptr<ChanceNode> node,
         if (offset < 0) {
             int rank1 = one_card->getCardInt() % 4;
             int rank2 = rank1 + offset;
-#ifdef DEBUG
-            if (rank2 < 0)
-                throw runtime_error("rank error");
-#endif
+            assert(rank2 >= 0 && "rank error");
             child_utility = results[one_card->getNumberInDeckInt() + offset];
             exchange_color(child_utility, this->pcm.getPreflopCards(player), rank1, rank2);
         } else {
@@ -387,10 +374,7 @@ vector<float> PCfrSolver::chanceUtility(int player, shared_ptr<ChanceNode> node,
         if (child_utility.empty())
             continue;
 
-#ifdef DEBUG
-        if (child_utility.size() != chance_utility.size())
-            throw runtime_error("length not match");
-#endif
+        assert(child_utility.size() == chance_utility.size() && "length not match");
         if (iter > this->warmup) {
             for (std::size_t i = 0; i < child_utility.size(); i++)
                 chance_utility[i] += child_utility[i];
@@ -400,14 +384,8 @@ vector<float> PCfrSolver::chanceUtility(int player, shared_ptr<ChanceNode> node,
         }
     }
 
-#ifdef DEBUG
-    if (this->monteCarolAlg == MonteCarolAlg::PUBLIC) {
-        throw runtime_error("not possible");
-    }
-    if (chance_utility.size() != this->ranges[player].size()) {
-        throw runtime_error("size problems");
-    }
-#endif
+    assert(this->monteCarolAlg != MonteCarolAlg::PUBLIC && "not possible");
+    assert(chance_utility.size() == this->ranges[player].size() && "size problems");
     return chance_utility;
 }
 
@@ -433,11 +411,7 @@ vector<float> PCfrSolver::actionUtility(int player, shared_ptr<ActionNode> node,
      */
     trainable = node->getTrainable(deal, true, this->use_halffloats);
 
-#ifdef DEBUG
-    if (trainable == nullptr) {
-        throw runtime_error("null trainable");
-    }
-#endif
+    assert(trainable != nullptr && "null trainable");
 
     const vector<float> current_strategy = trainable->getcurrentStrategy();
 #ifdef DEBUG
@@ -962,10 +936,7 @@ void PCfrSolver::reConvertJson(const shared_ptr<GameTreeNode>& node, json& strat
             } else if (deal > 0 && deal <= card_num) {
                 int origin_deal = deal - 1;
 
-#ifdef DEBUG
-                if (origin_deal == card)
-                    throw runtime_error("deal should not be equal");
-#endif
+                assert(origin_deal != card && "deal should not be equal");
                 new_deal = card_num * origin_deal + card;
                 new_deal += (1 + card_num);
             } else {

@@ -14,15 +14,12 @@
 #include <include/nodes/ChanceNode.h>
 #include <include/nodes/TerminalNode.h>
 #include <include/nodes/ShowdownNode.h>
+#include <cassert>
 
 template <typename T>
 void exchange_color(vector<T>& value, vector<PrivateCards> range, int rank1, int rank2) {
-#ifdef DEBUG
-    if (value.size() != range.size())
-        throw runtime_error("size problem");
-    if (rank1 >= rank2)
-        throw runtime_error("rank value problem");
-#endif
+    assert(value.size() == range.size() && "size problem");
+    assert(rank1 < rank2 && "rank value problem");
     if (value.empty())
         return;
     vector<int> self_ind = vector<int>(value.size());

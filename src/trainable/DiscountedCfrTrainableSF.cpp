@@ -2,8 +2,7 @@
 // based DiscountableCfrTrainable.h from Xuefeng Huang on 2020/1/31.
 
 #include "include/trainable/DiscountedCfrTrainableSF.h"
-
-//#define DEBUG;
+#include <cassert>
 
 DiscountedCfrTrainableSF::DiscountedCfrTrainableSF(vector<PrivateCards>* privateCards, ActionNode& actionNode)
     : action_node(actionNode) {
@@ -76,10 +75,7 @@ const vector<float> DiscountedCfrTrainableSF::getcurrentStrategyNoCache() {
             } else {
                 current_strategy[index] = 1.0 / (this->action_number);
             }
-#ifdef DEBUG
-            if (this->r_plus[index] != this->r_plus[index])
-                throw runtime_error("nan found");
-#endif
+            assert(this->r_plus[index] == this->r_plus[index] && "nan found");
         }
     }
     return current_strategy;
@@ -95,10 +91,7 @@ void DiscountedCfrTrainableSF::setEv(const vector<float>& evs) {
 
 void DiscountedCfrTrainableSF::updateRegrets(const vector<float>& regrets, int iteration_number,
                                              const vector<float>& reach_probs) {
-#ifdef DEBUG
-    if (regrets.size() != this->action_number * this->card_number)
-        throw runtime_error("length not match");
-#endif
+    assert(regrets.size() == static_cast<std::size_t>(this->action_number * this->card_number) && "length not match");
 
     auto alpha_coef = pow(iteration_number, this->alpha);
     alpha_coef = alpha_coef / (1 + alpha_coef);
@@ -134,10 +127,7 @@ void DiscountedCfrTrainableSF::updateRegrets(const vector<float>& regrets, int i
             } else {
                 current_strategy[index] = 1.0 / (this->action_number);
             }
-#ifdef DEBUG
-            if (this->r_plus[index] != this->r_plus[index])
-                throw runtime_error("nan found");
-#endif
+            assert(this->r_plus[index] == this->r_plus[index] && "nan found");
         }
     }
     // end of inline replacement
