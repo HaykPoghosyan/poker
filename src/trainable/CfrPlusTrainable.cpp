@@ -90,15 +90,15 @@ void CfrPlusTrainable::updateRegrets(const vector<float>& regrets, int iteration
     if(regrets.size() != this->action_number * this->card_number) throw runtime_error("length not match");
 
     //Arrays.fill(this.r_plus_sum,0);
-    fill(r_plus_sum.begin(),r_plus_sum.end(),0);
-    fill(cum_r_plus_sum.begin(),cum_r_plus_sum.end(),0);
-    for (int action_id = 0;action_id < action_number;action_id++) {
-        for(int private_id = 0;private_id < this->card_number;private_id++){
-            int index = action_id * this->card_number + private_id;
+    fill(r_plus_sum.begin(), r_plus_sum.end(), 0.0f);
+    fill(cum_r_plus_sum.begin(), cum_r_plus_sum.end(), 0.0f);
+    for (std::size_t action_id = 0; action_id < action_number; action_id++) {
+        for(std::size_t private_id = 0; private_id < this->card_number; private_id++){
+            auto index = action_id * this->card_number + private_id;
             float one_reg = regrets[index];
 
             // Update R+
-            this->r_plus[index] = max((float)0.0,one_reg + this->r_plus[index]);
+            this->r_plus[index] = max(0.0f, one_reg + this->r_plus[index]);
             this->r_plus_sum[private_id] += this->r_plus[index];
 
             // Update the cumulative strategy
@@ -122,7 +122,7 @@ json CfrPlusTrainable::dump_strategy(bool with_state) {
     //SolverEnvironment se = SolverEnvironment.getInstance();
     //Compairer comp = se.getCompairer();
 
-    for(int i = 0;i < this->privateCards.size();i++){
+    for(std::size_t i = 0; i < this->privateCards.size(); ++i){
         PrivateCards one_private_card = this->privateCards[i];
         vector<float> one_strategy(this->action_number);
 
@@ -137,8 +137,8 @@ json CfrPlusTrainable::dump_strategy(bool with_state) {
         int rank = comp.get_rank(new int[]{one_private_card.card1,one_private_card.card2},initialBoard);
          */
 
-        for(int j = 0;j < this->action_number;j++){
-            int strategy_index = j * this->privateCards.size() + i;
+        for(std::size_t j = 0; j < this->action_number; ++j){
+            auto strategy_index = j * this->privateCards.size() + i;
             one_strategy[j] = average_strategy[strategy_index];
         }
         strategy[tfm::format("%s",one_private_card.toString())] = one_strategy;

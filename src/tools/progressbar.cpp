@@ -99,4 +99,3 @@ void progressbar::update() {
 
     return;
 }
-

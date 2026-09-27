@@ -98,17 +98,16 @@ vector<PrivateCards>
 PCfrSolver::noDuplicateRange(const vector<PrivateCards> &private_range, uint64_t board_long) {
     vector<PrivateCards> range_array;
     unordered_map<int,bool> rangekv;
-    for(PrivateCards one_range:private_range){
+    for(PrivateCards one_range : private_range){
         if(rangekv.find(one_range.hashCode()) != rangekv.end())
-            throw runtime_error(tfm::format("duplicated key %s",one_range.toString()));
+            throw runtime_error(tfm::format("duplicated key %s", one_range.toString()));
         rangekv[one_range.hashCode()] = true;
         uint64_t hand_long = Card::boardInts2long(one_range.get_hands());
-        if(!Card::boardsHasIntercept(hand_long,board_long)){
+        if(!Card::boardsHasIntercept(hand_long, board_long)){
             range_array.push_back(one_range);
         }
     }
     return range_array;
-
 }
 
 void PCfrSolver::setTrainable(shared_ptr<GameTreeNode> root) {
