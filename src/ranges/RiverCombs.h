@@ -13,7 +13,8 @@ public:
     PrivateCards private_cards;
     int reach_prob_index;
     RiverCombs();
-    RiverCombs(vector<int> board,PrivateCards private_cards , int rank, int reach_prob_index);
+    RiverCombs(vector<int> board, PrivateCards private_cards, int rank, int reach_prob_index);
+
 private:
     vector<int> board;
 };

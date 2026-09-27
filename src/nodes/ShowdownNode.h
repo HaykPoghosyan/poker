@@ -7,15 +7,15 @@
 
 #include "GameTreeNode.h"
 
-class ShowdownNode:public GameTreeNode {
+class ShowdownNode : public GameTreeNode {
 public:
-    enum ShowDownResult{
-        NOTTIE,TIE
-    };
+    enum ShowDownResult { NOTTIE, TIE };
+
     GameTreeNodeType getType() override;
-    ShowdownNode(vector<double> tie_payoffs,vector<vector<double>> player_payoffs,GameRound round,double pot,shared_ptr<GameTreeNode> parent);
-    vector<double> get_payoffs(ShowDownResult result,int winner);
-    double get_payoffs(ShowDownResult result,int winner,int player);
+    ShowdownNode(vector<double> tie_payoffs, vector<vector<double>> player_payoffs, GameRound round, double pot,
+                 shared_ptr<GameTreeNode> parent);
+    vector<double> get_payoffs(ShowDownResult result, int winner);
+    double get_payoffs(ShowDownResult result, int winner, int player);
 
 private:
     // TODO: this could be slimmed down, double -> float

@@ -16,32 +16,39 @@
 #include <include/nodes/ShowdownNode.h>
 
 template <typename T>
-void exchange_color(vector<T>& value,vector<PrivateCards> range,int rank1,int rank2){
+void exchange_color(vector<T>& value, vector<PrivateCards> range, int rank1, int rank2) {
 #ifdef DEBUG
-    if(value.size() != range.size()) throw runtime_error("size problem");
-    if(rank1 >= rank2) throw runtime_error("rank value problem");
+    if (value.size() != range.size())
+        throw runtime_error("size problem");
+    if (rank1 >= rank2)
+        throw runtime_error("rank value problem");
 #endif
-    if(value.empty())return;
+    if (value.empty())
+        return;
     vector<int> self_ind = vector<int>(value.size());
     int privateint2ind[52 * 52 * 2] = {0};
-    for(std::size_t i = 0;i < range.size();i++){
+    for (std::size_t i = 0; i < range.size(); i++) {
         PrivateCards& pc = range[i];
         int card1 = pc.card1;
         int card2 = pc.card2;
-        if(card1 > card2){
+        if (card1 > card2) {
             int tmp = card1;
             card1 = card2;
             card2 = tmp;
         }
         self_ind[i] = card1 * 52 + card2;
 
-        if(card1 % 4 == rank1) card1 = card1 - rank1 + rank2;
-        else if(card1 % 4 == rank2) card1 = card1 - rank2 + rank1;
+        if (card1 % 4 == rank1)
+            card1 = card1 - rank1 + rank2;
+        else if (card1 % 4 == rank2)
+            card1 = card1 - rank2 + rank1;
 
-        if(card2 % 4 == rank1) card2 = card2 - rank1 + rank2;
-        else if(card2 % 4 == rank2) card2 = card2 - rank2 + rank1;
+        if (card2 % 4 == rank1)
+            card2 = card2 - rank1 + rank2;
+        else if (card2 % 4 == rank2)
+            card2 = card2 - rank2 + rank1;
 
-        if(card1 > card2){
+        if (card1 > card2) {
             int tmp = card1;
             card1 = card2;
             card2 = tmp;
@@ -49,12 +56,13 @@ void exchange_color(vector<T>& value,vector<PrivateCards> range,int rank1,int ra
         privateint2ind[card1 * 52 + card2] = i;
     }
 
-    for(std::size_t i = 0;i < range.size();i++) {
-        if(self_ind[i] == -1) continue;
+    for (std::size_t i = 0; i < range.size(); i++) {
+        if (self_ind[i] == -1)
+            continue;
         std::size_t ind = privateint2ind[self_ind[i]];
         //cout << range[i].toString() << " ";
         //cout << range[ind].toString() << endl;
-        if(ind != i){
+        if (ind != i) {
             self_ind[ind] = -1;
             T tmp = value[i];
             value[i] = value[ind];

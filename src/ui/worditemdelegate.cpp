@@ -5,11 +5,9 @@
 #include <QRect>
 #include <QBrush>
 
-WordItemDelegate::WordItemDelegate(QObject *parent) :
-    QStyledItemDelegate(parent)
-{}
+WordItemDelegate::WordItemDelegate(QObject* parent) : QStyledItemDelegate(parent) {}
 
-QString WordItemDelegate::anchorAt(QString html, const QPoint &point) const {
+QString WordItemDelegate::anchorAt(QString html, const QPoint& point) const {
     QTextDocument doc;
     doc.setHtml(html);
 
@@ -18,7 +16,7 @@ QString WordItemDelegate::anchorAt(QString html, const QPoint &point) const {
     return textLayout->anchorAt(point);
 }
 
-void WordItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
+void WordItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const {
     auto options = option;
     initStyleOption(&options, index);
 
@@ -37,7 +35,7 @@ void WordItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     painter->restore();
 }
 
-QSize WordItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
+QSize WordItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const {
     QStyleOptionViewItem options = option;
     initStyleOption(&options, index);
 

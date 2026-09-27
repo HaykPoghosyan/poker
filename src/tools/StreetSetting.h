@@ -15,7 +15,6 @@ public:
     bool allin;
 
     StreetSetting(vector<float> bet_sizes, vector<float> raise_sizes, vector<float> donk_sizes, bool allin);
-
 };
 
 #endif //BINDSOLVER_STREETSETTING_H

@@ -4,9 +4,7 @@
 
 #include "include/solver/Solver.h"
 
-Solver::Solver() {
-
-}
+Solver::Solver() {}
 
 Solver::Solver(shared_ptr<GameTree> tree) {
     this->tree = tree;

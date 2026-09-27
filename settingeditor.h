@@ -10,12 +10,11 @@ namespace Ui {
 class SettingEditor;
 }
 
-class SettingEditor : public QDialog
-{
+class SettingEditor : public QDialog {
     Q_OBJECT
 
 public:
-    explicit SettingEditor(QWidget *parent = 0);
+    explicit SettingEditor(QWidget* parent = 0);
     ~SettingEditor();
 
 private slots:
@@ -24,7 +23,7 @@ private slots:
     void on_languageBox_currentIndexChanged(int index);
 
 private:
-    Ui::SettingEditor *ui;
+    Ui::SettingEditor* ui;
     bool initized = false;
 };
 

@@ -17,18 +17,18 @@
 #include "include/ui/roughstrategyviewermodel.h"
 #include "include/library.h"
 
-class RoughStrategyItemDelegate: public WordItemDelegate{
+class RoughStrategyItemDelegate : public WordItemDelegate {
     Q_OBJECT
 
 public:
-    explicit RoughStrategyItemDelegate(DetailWindowSetting* detailWindowSetting,QObject *parent = 0);
+    explicit RoughStrategyItemDelegate(DetailWindowSetting* detailWindowSetting, QObject* parent = 0);
 
 private:
     DetailWindowSetting* detailWindowSetting = NULL;
 
 protected:
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    void paint_strategy(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    void paint_strategy(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
 
 #endif // ROUGHSTRATEGYITEMDELEGATE_H

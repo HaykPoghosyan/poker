@@ -15,21 +15,22 @@ struct MouseTracker {
     bool tracking;
     int pressed_i;
     int pressed_j;
-} ;
+};
 
-class HtmlTableRangeView: public HtmlTableView
-{
+class HtmlTableRangeView : public HtmlTableView {
     Q_OBJECT
 public:
-    explicit HtmlTableRangeView(QWidget *parent = 0);
+    explicit HtmlTableRangeView(QWidget* parent = 0);
 signals:
-    void view_item_pressed(int i,int j);
-    void view_item_area(int i1,int j1,int i2,int j2);
-    void item_release(int i,int j);
+    void view_item_pressed(int i, int j);
+    void view_item_area(int i1, int j1, int i2, int j2);
+    void item_release(int i, int j);
+
 protected:
-    bool eventFilter(QObject *watched, QEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
+    bool eventFilter(QObject* watched, QEvent* event);
+    void mousePressEvent(QMouseEvent* event);
+    void mouseReleaseEvent(QMouseEvent* event);
+
 private:
     MouseTracker mouseTracker;
 };

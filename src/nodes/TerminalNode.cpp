@@ -4,12 +4,11 @@
 
 #include "include/nodes/TerminalNode.h"
 
-TerminalNode::TerminalNode() {
-
-}
+TerminalNode::TerminalNode() {}
 
 TerminalNode::TerminalNode(vector<double> payoffs, int winner, GameTreeNode::GameRound round, double pot,
-                           shared_ptr<GameTreeNode> parent):GameTreeNode(round,pot,parent){
+                           shared_ptr<GameTreeNode> parent)
+    : GameTreeNode(round, pot, parent) {
     this->payoffs = payoffs;
     this->winner = winner;
 }

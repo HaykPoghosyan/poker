@@ -19,32 +19,31 @@
 #include <QStringList>
 #include <QString>
 
-class BoardSelectorTableModel : public QAbstractItemModel
-{
+class BoardSelectorTableModel : public QAbstractItemModel {
     Q_OBJECT
 
 public:
-    explicit BoardSelectorTableModel(QStringList ranks,QString initial_board,QObject *parent = nullptr);
+    explicit BoardSelectorTableModel(QStringList ranks, QString initial_board, QObject* parent = nullptr);
     ~BoardSelectorTableModel();
 
     float getBoardAt(int i, int j);
-    void setBoardAt(int i, int j,float value);
+    void setBoardAt(int i, int j, float value);
 
     void setBoardText(QString input_board);
     QString getBoardText();
-    QVariant data(const QModelIndex &index, int role) const override;
-    QModelIndex index(int row, int column,
-                      const QModelIndex &parent = QModelIndex()) const override;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole );
-    QModelIndex parent(const QModelIndex &child) const;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex& index, int role) const override;
+    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole);
+    QModelIndex parent(const QModelIndex& child) const;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     void clear_board();
+
 private:
     vector<vector<QString>> grids_string;
     vector<vector<float>> grids_float;
-    map<QString,pair<int,int>> string2ij;
-    QString get_ij_text(int i,int j) const;
+    map<QString, pair<int, int>> string2ij;
+    QString get_ij_text(int i, int j) const;
     QStringList ranklist;
     QStringList suitlist;
 };

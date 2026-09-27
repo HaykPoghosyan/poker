@@ -16,21 +16,21 @@
 #include "include/ui/detailviewermodel.h"
 #include "include/library.h"
 
-class DetailItemDelegate: public WordItemDelegate{
+class DetailItemDelegate : public WordItemDelegate {
     Q_OBJECT
 
 public:
-    explicit DetailItemDelegate(DetailWindowSetting* detailWindowSetting,QObject *parent = 0);
+    explicit DetailItemDelegate(DetailWindowSetting* detailWindowSetting, QObject* parent = 0);
 
 private:
     DetailWindowSetting* detailWindowSetting = NULL;
 
 protected:
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    void paint_strategy(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    void paint_range(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    void paint_evs(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    void paint_evs_only(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    void paint_strategy(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    void paint_range(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    void paint_evs(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    void paint_evs_only(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
 
 #endif // DETAILITEMDELEGATE_H

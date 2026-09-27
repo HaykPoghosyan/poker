@@ -6,9 +6,7 @@
 
 #include <utility>
 
-GameTreeNode::GameTreeNode() {
-
-}
+GameTreeNode::GameTreeNode() {}
 
 GameTreeNode::GameTreeNode(GameTreeNode::GameRound round, double pot, shared_ptr<GameTreeNode> parent) {
     this->round = round;
@@ -17,23 +15,23 @@ GameTreeNode::GameTreeNode(GameTreeNode::GameRound round, double pot, shared_ptr
 }
 
 int GameTreeNode::gameRound2int(GameTreeNode::GameRound gameRound) {
-    if(gameRound == GameRound::PREFLOP) {
+    if (gameRound == GameRound::PREFLOP) {
         return 0;
-    }else if(gameRound == GameRound::FLOP){
+    } else if (gameRound == GameRound::FLOP) {
         return 1;
-    } else if(gameRound == GameRound::TURN) {
+    } else if (gameRound == GameRound::TURN) {
         return 2;
-    } else if(gameRound == GameRound::RIVER) {
+    } else if (gameRound == GameRound::RIVER) {
         return 3;
     }
     throw runtime_error("round not found");
 }
 
-shared_ptr<GameTreeNode>GameTreeNode::getParent() {
+shared_ptr<GameTreeNode> GameTreeNode::getParent() {
     return this->parent.lock();
 }
 
-void GameTreeNode::setParent(shared_ptr<GameTreeNode>parent) {
+void GameTreeNode::setParent(shared_ptr<GameTreeNode> parent) {
     this->parent = parent;
 }
 
@@ -49,33 +47,33 @@ void GameTreeNode::printHistory() {
     //GameTreeNode::printNodeHistory(this);
 }
 
-GameTreeNode::GameRound GameTreeNode::intToGameRound(int round){
+GameTreeNode::GameRound GameTreeNode::intToGameRound(int round) {
     GameTreeNode::GameRound game_round;
-    switch(round){
-        case 0:{
+    switch (round) {
+        case 0: {
             game_round = GameTreeNode::GameRound::PREFLOP;
             break;
         }
-        case 1:{
+        case 1: {
             game_round = GameTreeNode::GameRound::FLOP;
             break;
         }
-        case 2:{
+        case 2: {
             game_round = GameTreeNode::GameRound::TURN;
             break;
         }
-        case 3:{
+        case 3: {
             game_round = GameTreeNode::GameRound::RIVER;
             break;
         }
-        default:{
-            throw runtime_error(tfm::format("round %s not found",round));
+        default: {
+            throw runtime_error(tfm::format("round %s not found", round));
         }
     }
     return game_round;
 }
 
-string GameTreeNode::toString(){
+string GameTreeNode::toString() {
     /*
     shared_ptr<GameTreeNode>parent_node = node->parent;
     string round;

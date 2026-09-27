@@ -17,6 +17,7 @@
 #include "include/tools/utils.h"
 #include <queue>
 #include <optional>
+
 /*
 template<typename T>
 class ThreadsafeQueue {
@@ -72,32 +73,19 @@ struct TaskParams{
 };
 */
 
-class PCfrSolver:public Solver {
+class PCfrSolver : public Solver {
 public:
-    PCfrSolver(shared_ptr<GameTree> tree,
-            vector<PrivateCards> range1 ,
-            vector<PrivateCards> range2,
-            vector<int> initial_board,
-            shared_ptr<Compairer> compairer,
-            Deck deck,
-            int iteration_number,
-            bool debug,
-            int print_interval,
-            string logfile,
-            string trainer,
-            Solver::MonteCarolAlg monteCarolAlg,
-            int warmup,
-            float accuracy,
-            bool use_isomorphism,
-            int use_halffloats,
-            int num_threads
-    );
+    PCfrSolver(shared_ptr<GameTree> tree, vector<PrivateCards> range1, vector<PrivateCards> range2,
+               vector<int> initial_board, shared_ptr<Compairer> compairer, Deck deck, int iteration_number, bool debug,
+               int print_interval, string logfile, string trainer, Solver::MonteCarolAlg monteCarolAlg, int warmup,
+               float accuracy, bool use_isomorphism, int use_halffloats, int num_threads);
     ~PCfrSolver();
     void train() override;
     void stop() override;
-    json dumps(bool with_status,int depth) override;
-    vector<vector<vector<float>>> get_strategy(shared_ptr<ActionNode> node,vector<Card> chance_cards) override;
-    vector<vector<vector<float>>> get_evs(shared_ptr<ActionNode> node,vector<Card> chance_cards) override;
+    json dumps(bool with_status, int depth) override;
+    vector<vector<vector<float>>> get_strategy(shared_ptr<ActionNode> node, vector<Card> chance_cards) override;
+    vector<vector<vector<float>>> get_evs(shared_ptr<ActionNode> node, vector<Card> chance_cards) override;
+
 private:
     vector<vector<PrivateCards>> ranges;
     vector<PrivateCards> range1;
@@ -132,19 +120,24 @@ private:
 
     const vector<PrivateCards>& playerHands(int player);
     vector<vector<float>> getReachProbs();
-    static vector<PrivateCards> noDuplicateRange(const vector<PrivateCards>& private_range,uint64_t board_long);
+    static vector<PrivateCards> noDuplicateRange(const vector<PrivateCards>& private_range, uint64_t board_long);
     void setTrainable(shared_ptr<GameTreeNode> root);
-    vector<float> cfr(int player, shared_ptr<GameTreeNode> node, const vector<float>& reach_probs, int iter, uint64_t current_board,int deal);
+    vector<float> cfr(int player, shared_ptr<GameTreeNode> node, const vector<float>& reach_probs, int iter,
+                      uint64_t current_board, int deal);
     vector<int> getAllAbstractionDeal(int deal);
-    vector<float> chanceUtility(int player,shared_ptr<ChanceNode> node,const vector<float>& reach_probs,int iter,uint64_t current_boardi,int deal);
-    vector<float> showdownUtility(int player,shared_ptr<ShowdownNode> node,const vector<float>& reach_probs,int iter,uint64_t current_board,int deal);
-    vector<float> actionUtility(int player,shared_ptr<ActionNode> node,const vector<float>& reach_probs,int iter,uint64_t current_board,int deal);
-    vector<float> terminalUtility(int player,shared_ptr<TerminalNode> node,const vector<float>& reach_prob,int iter,uint64_t current_board,int deal);
+    vector<float> chanceUtility(int player, shared_ptr<ChanceNode> node, const vector<float>& reach_probs, int iter,
+                                uint64_t current_boardi, int deal);
+    vector<float> showdownUtility(int player, shared_ptr<ShowdownNode> node, const vector<float>& reach_probs, int iter,
+                                  uint64_t current_board, int deal);
+    vector<float> actionUtility(int player, shared_ptr<ActionNode> node, const vector<float>& reach_probs, int iter,
+                                uint64_t current_board, int deal);
+    vector<float> terminalUtility(int player, shared_ptr<TerminalNode> node, const vector<float>& reach_prob, int iter,
+                                  uint64_t current_board, int deal);
     void findGameSpecificIsomorphisms();
     void purnTree();
-    void exchangeRange(json& strategy,int rank1,int rank2,shared_ptr<ActionNode> one_node);
-    void reConvertJson(const shared_ptr<GameTreeNode>& node,json& strategy,string key,int depth,int max_depth,vector<string> prefix,int deal,vector<vector<int>> exchange_color_list);
-
+    void exchangeRange(json& strategy, int rank1, int rank2, shared_ptr<ActionNode> one_node);
+    void reConvertJson(const shared_ptr<GameTreeNode>& node, json& strategy, string key, int depth, int max_depth,
+                       vector<string> prefix, int deal, vector<vector<int>> exchange_color_list);
 };
 
 #endif //TEXASSOLVER_PCFRSOLVER_H

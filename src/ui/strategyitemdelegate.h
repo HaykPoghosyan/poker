@@ -15,21 +15,23 @@
 #include "include/ui/detailwindowsetting.h"
 #include "include/library.h"
 
-class StrategyItemDelegate: public WordItemDelegate{
+class StrategyItemDelegate : public WordItemDelegate {
     Q_OBJECT
 
 public:
-    explicit StrategyItemDelegate(QSolverJob * qSolverJob,DetailWindowSetting* detailWindowSetting,QObject *parent = 0);
+    explicit StrategyItemDelegate(QSolverJob* qSolverJob, DetailWindowSetting* detailWindowSetting,
+                                  QObject* parent = 0);
 
 private:
-    QSolverJob * qSolverJob = NULL;
+    QSolverJob* qSolverJob = NULL;
     DetailWindowSetting* detailWindowSetting = NULL;
 
 protected:
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    void paint_strategy(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index, bool withEVs = false) const;
-    void paint_range(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    void paint_evs(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    void paint_strategy(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index,
+                        bool withEVs = false) const;
+    void paint_range(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    void paint_evs(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
 
 #endif // STRATEGYITEMDELEGATE_H

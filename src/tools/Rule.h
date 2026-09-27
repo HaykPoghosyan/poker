@@ -11,7 +11,7 @@
 
 using namespace std;
 
-class Rule{
+class Rule {
 public:
     Deck& deck;
     float oop_commit;
@@ -22,21 +22,11 @@ public:
     float big_blind;
     float stack;
     GameTreeBuildingSettings build_settings;
-    vector<int> players = {0,1};
+    vector<int> players = {0, 1};
     float allin_threshold;
     float initial_effective_stack;
-    Rule(
-            Deck deck,
-            float oop_commit,
-            float ip_commit,
-            int current_round,
-            int raise_limit,
-            float small_blind,
-            float big_blind,
-            float stack,
-            GameTreeBuildingSettings build_settings,
-            float allin_threshold
-    ) ;
+    Rule(Deck deck, float oop_commit, float ip_commit, int current_round, int raise_limit, float small_blind,
+         float big_blind, float stack, GameTreeBuildingSettings build_settings, float allin_threshold);
 
     float get_pot();
     float get_commit(int player);

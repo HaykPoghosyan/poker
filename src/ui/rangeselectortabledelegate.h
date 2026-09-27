@@ -19,16 +19,18 @@
 #include <QStringList>
 #include <QPainter>
 
-class RangeSelectorTableDelegate: public WordItemDelegate{
+class RangeSelectorTableDelegate : public WordItemDelegate {
     Q_OBJECT
 
 public:
-    explicit RangeSelectorTableDelegate(QStringList ranks,RangeSelectorTableModel* rangeSelectorTableModel,QObject *parent = 0);
+    explicit RangeSelectorTableDelegate(QStringList ranks, RangeSelectorTableModel* rangeSelectorTableModel,
+                                        QObject* parent = 0);
 
 protected:
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+
 private:
-    RangeSelectorTableModel *rangeSelectorTableModel;
+    RangeSelectorTableModel* rangeSelectorTableModel;
     QStringList rank_list;
 };
 

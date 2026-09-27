@@ -10,11 +10,10 @@
 #include <QFile>
 #include <QTextStream>
 
-class DropTextEdit: public QTextEdit
-{
+class DropTextEdit : public QTextEdit {
     Q_OBJECT
 public:
-    explicit DropTextEdit(QWidget *parent = 0);
+    explicit DropTextEdit(QWidget* parent = 0);
     DropTextEdit();
 
 protected:

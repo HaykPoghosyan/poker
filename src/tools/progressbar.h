@@ -44,32 +44,47 @@
 #include <string>
 
 class progressbar {
-
 public:
     // default destructor
-    ~progressbar()                             = default;
+    ~progressbar() = default;
 
     // delete everything else
-    progressbar           (progressbar const&) = delete;
+    progressbar(progressbar const&) = delete;
     progressbar& operator=(progressbar const&) = delete;
-    progressbar           (progressbar&&)      = delete;
-    progressbar& operator=(progressbar&&)      = delete;
+    progressbar(progressbar&&) = delete;
+    progressbar& operator=(progressbar&&) = delete;
 
     // default constructor, must call set_niter later
     progressbar();
-    progressbar(int n, bool showbar=true);
+    progressbar(int n, bool showbar = true);
 
     // reset bar to use it again
     void reset();
     // set number of loop iterations
     void set_niter(int iter);
+
     // chose your style
-    void set_done_char(const std::string& sym) {done_char = sym;}
-    void set_todo_char(const std::string& sym) {todo_char = sym;}
-    void set_opening_bracket_char(const std::string& sym) {opening_bracket_char = sym;}
-    void set_closing_bracket_char(const std::string& sym) {closing_bracket_char = sym;}
+    void set_done_char(const std::string& sym) {
+        done_char = sym;
+    }
+
+    void set_todo_char(const std::string& sym) {
+        todo_char = sym;
+    }
+
+    void set_opening_bracket_char(const std::string& sym) {
+        opening_bracket_char = sym;
+    }
+
+    void set_closing_bracket_char(const std::string& sym) {
+        closing_bracket_char = sym;
+    }
+
     // to show only the percentage
-    void show_bar(bool flag = true) {do_show_bar = flag;}
+    void show_bar(bool flag = true) {
+        do_show_bar = flag;
+    }
+
     // main function
     void update();
 

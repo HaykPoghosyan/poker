@@ -5,16 +5,15 @@
 #include "include/runtime/qsolverjob.h"
 #include "include/ui/treemodel.h"
 
-class QSTreeView: public QTreeView
-{
+class QSTreeView : public QTreeView {
 public:
-    explicit QSTreeView(QWidget *parent = nullptr);
+    explicit QSTreeView(QWidget* parent = nullptr);
     ~QSTreeView();
     void setTreeData(QSolverJob* qSolverJob);
     TreeModel* tree_model;
 
 private:
-    QSolverJob * qSolverJob=NULL;
+    QSolverJob* qSolverJob = NULL;
 };
 
 #endif // QSTREEVIEW_H

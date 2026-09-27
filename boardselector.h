@@ -13,20 +13,19 @@ namespace Ui {
 class boardselector;
 }
 
-class boardselector : public QDialog
-{
+class boardselector : public QDialog {
     Q_OBJECT
 
 public:
-    explicit boardselector(QTextEdit* boardEdit,QSolverJob::Mode mode = QSolverJob::Mode::HOLDEM,QWidget *parent = 0);
+    explicit boardselector(QTextEdit* boardEdit, QSolverJob::Mode mode = QSolverJob::Mode::HOLDEM, QWidget* parent = 0);
     ~boardselector();
 
 private slots:
-    void on_boardSelectorTable_clicked(const QModelIndex &index);
+    void on_boardSelectorTable_clicked(const QModelIndex& index);
 
-    void on_boardEdit_textEdited(const QString &arg1);
+    void on_boardEdit_textEdited(const QString& arg1);
 
-    void on_boardEdit_textChanged(const QString &arg1);
+    void on_boardEdit_textChanged(const QString& arg1);
 
     void on_confirmButton_clicked();
 
@@ -35,12 +34,12 @@ private slots:
     void on_clearBoardButton_clicked();
 
 private:
-    Ui::boardselector *ui;
+    Ui::boardselector* ui;
     QTextEdit* boardEdit = NULL;
     QSolverJob::Mode mode;
     QStringList rank_list;
-    BoardSelectorTableModel * boardSelectorTableModel = NULL;
-    BoardSelectorTableDelegate * boardSelectorTableDelegate = NULL;
+    BoardSelectorTableModel* boardSelectorTableModel = NULL;
+    BoardSelectorTableDelegate* boardSelectorTableDelegate = NULL;
 };
 
 #endif // BOARDSELECTOR_H

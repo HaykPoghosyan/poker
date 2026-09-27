@@ -12,29 +12,12 @@ using namespace std;
 
 class GameTreeNode {
 public:
-    enum PokerActions{
-        BEGIN,
-        ROUNDBEGIN,
-        BET,
-        RAISE,
-        CHECK,
-        FOLD,
-        CALL
-    };
+    enum PokerActions { BEGIN, ROUNDBEGIN, BET, RAISE, CHECK, FOLD, CALL };
 
-    enum GameTreeNodeType{
-        ACTION,
-        SHOWDOWN,
-        TERMINAL,
-        CHANCE
-    };
+    enum GameTreeNodeType { ACTION, SHOWDOWN, TERMINAL, CHANCE };
 
-    enum GameRound{
-        PREFLOP,
-        FLOP,
-        TURN,
-        RIVER
-    };
+    enum GameRound { PREFLOP, FLOP, TURN, RIVER };
+
     GameTreeNode();
     GameTreeNode(GameRound round, double pot, shared_ptr<GameTreeNode> parent);
     static GameTreeNode::GameRound intToGameRound(int round);

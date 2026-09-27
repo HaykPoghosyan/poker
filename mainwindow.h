@@ -18,17 +18,16 @@ namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    static QSTextEdit * s_textEdit;
-    explicit MainWindow(QWidget *parent = 0);
+    static QSTextEdit* s_textEdit;
+    explicit MainWindow(QWidget* parent = 0);
     ~MainWindow();
-    Ui::MainWindow * getPriUi();
-    QSTextEdit * getLogArea();
-    QSTextEdit * get_logwindow();
+    Ui::MainWindow* getPriUi();
+    QSTextEdit* getLogArea();
+    QSTextEdit* get_logwindow();
 
 private slots:
     void on_buttomSolve_clicked();
@@ -60,18 +59,17 @@ private slots:
 
 private:
     void clear_all_params();
-    Ui::MainWindow *ui = NULL;
+    Ui::MainWindow* ui = NULL;
     QSolverJob* qSolverJob = NULL;
-    QFileSystemModel * qFileSystemModel = NULL;
+    QFileSystemModel* qFileSystemModel = NULL;
     StrategyExplorer* strategyExplorer = NULL;
     RangeSelector* rangeSelector = NULL;
     boardselector* boardSelector = NULL;
     SettingEditor* settingEditor = NULL;
-    RangeSelectorTableDelegate * ip_delegate;
-    RangeSelectorTableDelegate * oop_delegate;
-    RangeSelectorTableModel * ip_model;
-    RangeSelectorTableModel * oop_model;
-
+    RangeSelectorTableDelegate* ip_delegate;
+    RangeSelectorTableDelegate* oop_delegate;
+    RangeSelectorTableModel* ip_model;
+    RangeSelectorTableModel* oop_model;
 };
 
 #endif // MAINWINDOW_H

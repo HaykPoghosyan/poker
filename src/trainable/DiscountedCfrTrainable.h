@@ -9,7 +9,7 @@
 #include "Trainable.h"
 using namespace std;
 
-class DiscountedCfrTrainable:public Trainable {
+class DiscountedCfrTrainable : public Trainable {
 private:
     ActionNode& action_node;
     vector<PrivateCards>* privateCards;
@@ -28,8 +28,7 @@ private:
     //vector<float> current_strategy;
     //vector<float> average_strategy;
 public:
-    DiscountedCfrTrainable(vector<PrivateCards> *privateCards,
-                           ActionNode &actionNode);
+    DiscountedCfrTrainable(vector<PrivateCards>* privateCards, ActionNode& actionNode);
     bool isAllZeros(const vector<float>& input_array);
 
     const vector<float> getAverageStrategy() override;
@@ -47,11 +46,9 @@ public:
     json dump_evs() override;
 
 private:
-
     const vector<float> getcurrentStrategyNoCache();
 
     TrainableType get_type() override;
-
 };
 
 #endif //TEXASSOLVER_DISCOUNTEDCFRTRAINABLE_H

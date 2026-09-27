@@ -16,11 +16,13 @@ class RiverRangeManager {
 public:
     RiverRangeManager();
     RiverRangeManager(shared_ptr<Compairer> handEvaluator);
-    const vector<RiverCombs>& getRiverCombos(int player, const vector<PrivateCards>& riverCombos, const vector<int>& board);
+    const vector<RiverCombs>& getRiverCombos(int player, const vector<PrivateCards>& riverCombos,
+                                             const vector<int>& board);
     const vector<RiverCombs>& getRiverCombos(int player, const vector<PrivateCards>& riverCombos, uint64_t board_long);
+
 private:
-    unordered_map<uint64_t , vector<RiverCombs>> p1RiverRanges;
-    unordered_map<uint64_t , vector<RiverCombs>> p2RiverRanges;
+    unordered_map<uint64_t, vector<RiverCombs>> p1RiverRanges;
+    unordered_map<uint64_t, vector<RiverCombs>> p2RiverRanges;
     shared_ptr<Compairer> handEvaluator;
     shared_ptr<mutex> maplock;
 };

@@ -6,11 +6,10 @@
 #include <string>
 using namespace std;
 
-class QSTextEdit : public QTextEdit
-{
+class QSTextEdit : public QTextEdit {
     Q_OBJECT
 public:
-    explicit QSTextEdit(QWidget *parent = nullptr);
+    explicit QSTextEdit(QWidget* parent = nullptr);
     void log_with_signal(QString message);
 
 signals:

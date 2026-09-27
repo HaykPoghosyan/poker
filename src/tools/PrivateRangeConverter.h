@@ -11,8 +11,7 @@ using namespace std;
 
 class PrivateRangeConverter {
 public:
-    static vector<PrivateCards> rangeStr2Cards(string range_str,vector<int> initial_boards);
-
+    static vector<PrivateCards> rangeStr2Cards(string range_str, vector<int> initial_boards);
 };
 
 #endif //TEXASSOLVER_PRIVATERANGECONVERTER_H

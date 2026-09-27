@@ -19,15 +19,17 @@
 #include <QStringList>
 #include <QPainter>
 
-class BoardSelectorTableDelegate: public WordItemDelegate{
+class BoardSelectorTableDelegate : public WordItemDelegate {
     Q_OBJECT
 public:
-    explicit BoardSelectorTableDelegate(QStringList ranks,BoardSelectorTableModel* boardSelectorTableModel,QObject *parent = 0);
+    explicit BoardSelectorTableDelegate(QStringList ranks, BoardSelectorTableModel* boardSelectorTableModel,
+                                        QObject* parent = 0);
 
 protected:
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+
 private:
-    BoardSelectorTableModel *boardSelectorTableModel;
+    BoardSelectorTableModel* boardSelectorTableModel;
     QStringList rank_list;
 };
 

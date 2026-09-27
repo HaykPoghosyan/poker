@@ -18,10 +18,10 @@ public:
     GameActions(GameTreeNode::PokerActions action, double amount);
     string toString();
     string pokerActionToString(GameTreeNode::PokerActions pokerActions);
+
 private:
     GameTreeNode::PokerActions action;
     double amount{};
-
 };
 
 #endif //TEXASSOLVER_GAMEACTIONS_H

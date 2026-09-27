@@ -10,7 +10,7 @@
 #include "include/trainable/Trainable.h"
 using namespace std;
 
-class CfrPlusTrainable : public Trainable{
+class CfrPlusTrainable : public Trainable {
 private:
     shared_ptr<ActionNode> action_node;
     vector<PrivateCards> privateCards;
@@ -22,6 +22,7 @@ private:
     vector<float> cum_r_plus_sum;
     vector<float> regrets;
     vector<float> retval;
+
 public:
     CfrPlusTrainable();
     CfrPlusTrainable(shared_ptr<ActionNode> action_node, vector<PrivateCards> privateCards);

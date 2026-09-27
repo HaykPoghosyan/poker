@@ -13,7 +13,7 @@
 using namespace std;
 using half_float::half;
 
-class DiscountedCfrTrainableSF:public Trainable {
+class DiscountedCfrTrainableSF : public Trainable {
 private:
     typedef half EvsStorage;
     typedef float RplusStorage;
@@ -29,9 +29,9 @@ private:
     constexpr static float gamma = 2;
     constexpr static float theta = 0.9f;
     vector<CumRplusStorage> cum_r_plus;
+
 public:
-    DiscountedCfrTrainableSF(vector<PrivateCards> *privateCards,
-                           ActionNode &actionNode);
+    DiscountedCfrTrainableSF(vector<PrivateCards>* privateCards, ActionNode& actionNode);
     bool isAllZeros(const vector<float>& input_array);
 
     const vector<float> getAverageStrategy() override;
@@ -49,11 +49,9 @@ public:
     json dump_evs() override;
 
 private:
-
     const vector<float> getcurrentStrategyNoCache();
 
     TrainableType get_type() override;
-
 };
 
 #endif //TEXASSOLVER_DiscountedCfrTrainableSF_H

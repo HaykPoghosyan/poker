@@ -1,5 +1,5 @@
 #include "include/ui/detailwindowsetting.h"
 
-DetailWindowSetting::DetailWindowSetting(){
+DetailWindowSetting::DetailWindowSetting() {
     this->mode = DetailWindowMode::STRATEGY;
 }

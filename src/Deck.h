@@ -12,13 +12,16 @@ public:
     Deck();
     Deck(const vector<string>& ranks, const vector<string>& suits);
     vector<Card>& getCards();
-    vector<string>& getRanks(){return this->ranks;};
+
+    vector<string>& getRanks() {
+        return this->ranks;
+    };
+
 private:
     vector<string> ranks;
     vector<string> suits;
     vector<string> cards_str;
     vector<Card> cards;
-
 };
 
 #endif //TEXASSOLVER_DECK_H

@@ -19,33 +19,36 @@
 #include <QStringList>
 #include <QString>
 
-class RangeSelectorTableModel : public QAbstractItemModel
-{
+class RangeSelectorTableModel : public QAbstractItemModel {
     Q_OBJECT
 
 public:
-    explicit RangeSelectorTableModel(QStringList ranks,QString initial_board,QObject *parent = nullptr,bool thumbnail=false);
+    explicit RangeSelectorTableModel(QStringList ranks, QString initial_board, QObject* parent = nullptr,
+                                     bool thumbnail = false);
     ~RangeSelectorTableModel();
 
     float getRangeAt(int i, int j);
-    void setRangeAt(int i, int j,float value);
+    void setRangeAt(int i, int j, float value);
 
     void setRangeText(QString input_range);
     QString getRangeText();
-    QVariant data(const QModelIndex &index, int role) const override;
-    QModelIndex index(int row, int column,
-                      const QModelIndex &parent = QModelIndex()) const override;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole );
-    QModelIndex parent(const QModelIndex &child) const;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex& index, int role) const override;
+    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole);
+    QModelIndex parent(const QModelIndex& child) const;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     void clear_range();
-    bool in_thumbnail_mode(){return this->thumbnail;}
+
+    bool in_thumbnail_mode() {
+        return this->thumbnail;
+    }
+
 private:
     vector<vector<QString>> grids_string;
     vector<vector<float>> grids_float;
-    map<QString,pair<int,int>> string2ij;
-    QString get_ij_text(int i,int j);
+    map<QString, pair<int, int>> string2ij;
+    QString get_ij_text(int i, int j);
     QStringList ranklist;
     bool thumbnail = false;
 };

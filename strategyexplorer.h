@@ -28,38 +28,36 @@ namespace Ui {
 class StrategyExplorer;
 }
 
-class StrategyExplorer : public QDialog
-{
+class StrategyExplorer : public QDialog {
     Q_OBJECT
 
 public:
-    explicit StrategyExplorer(QWidget *parent = 0,QSolverJob * qSolverJob=nullptr);
+    explicit StrategyExplorer(QWidget* parent = 0, QSolverJob* qSolverJob = nullptr);
     ~StrategyExplorer();
 
 private:
     DetailWindowSetting detailWindowSetting;
-    QTimer *timer;
-    Ui::StrategyExplorer *ui;
-    QSolverJob * qSolverJob;
-    StrategyItemDelegate * delegate_strategy;
-    TableStrategyModel * tableStrategyModel;
-    DetailViewerModel * detailViewerModel;
-    DetailItemDelegate * detailItemItemDelegate;
-    RoughStrategyViewerModel * roughStrategyViewerModel;
-    RoughStrategyItemDelegate * roughStrategyItemDelegate;
+    QTimer* timer;
+    Ui::StrategyExplorer* ui;
+    QSolverJob* qSolverJob;
+    StrategyItemDelegate* delegate_strategy;
+    TableStrategyModel* tableStrategyModel;
+    DetailViewerModel* detailViewerModel;
+    DetailItemDelegate* detailItemItemDelegate;
+    RoughStrategyViewerModel* roughStrategyViewerModel;
+    RoughStrategyItemDelegate* roughStrategyItemDelegate;
     vector<Card> cards;
     void process_treeclick(TreeItem* treeitem);
     void process_board(TreeItem* treeitem);
 public slots:
     void item_expanded(const QModelIndex& index);
     void item_clicked(const QModelIndex& index);
-    void selection_changed(const QItemSelection &selected,
-                                            const QItemSelection &deselected);
+    void selection_changed(const QItemSelection& selected, const QItemSelection& deselected);
 private slots:
     void on_turnCardBox_currentIndexChanged(int index);
     void on_riverCardBox_currentIndexChanged(int index);
     void update_second();
-    void onMouseMoveEvent(int i,int j);
+    void onMouseMoveEvent(int i, int j);
     void on_strategyModeButtom_clicked();
     void on_ipRangeButtom_clicked();
     void on_oopRangeButtom_clicked();

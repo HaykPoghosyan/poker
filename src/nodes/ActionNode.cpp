@@ -9,12 +9,13 @@
 #include <include/trainable/DiscountedCfrTrainableHF.h>
 #include <include/trainable/DiscountedCfrTrainableSF.h>
 
-ActionNode::~ActionNode(){
+ActionNode::~ActionNode() {
     //cout << "ActionNode destroyed" << endl;
 }
 
 ActionNode::ActionNode(vector<GameActions> actions, vector<shared_ptr<GameTreeNode>> childrens, int player,
-                       GameTreeNode::GameRound round, double pot, shared_ptr<GameTreeNode> parent) :GameTreeNode(round,pot,std::move(parent)){
+                       GameTreeNode::GameRound round, double pot, shared_ptr<GameTreeNode> parent)
+    : GameTreeNode(round, pot, std::move(parent)) {
     this->actions = std::move(actions);
     this->player = player;
     this->childrens = std::move(childrens);
@@ -37,35 +38,35 @@ GameTreeNode::GameTreeNodeType ActionNode::getType() {
     return ACTION;
 }
 
-shared_ptr<Trainable> ActionNode::getTrainable(int i,bool create_on_site, int use_halffloats) {
-    if(i > this->trainables.size()){
-        throw runtime_error(tfm::format("size unacceptable %s > %s ",i,this->trainables.size()));
+shared_ptr<Trainable> ActionNode::getTrainable(int i, bool create_on_site, int use_halffloats) {
+    if (i > this->trainables.size()) {
+        throw runtime_error(tfm::format("size unacceptable %s > %s ", i, this->trainables.size()));
     }
-    if(this->trainables[i] == nullptr && create_on_site){
-        switch ((this->getRound() == GameTreeNode::RIVER) ? use_halffloats : 0 ){
-        case 0:
-            this->trainables[i] = make_shared<DiscountedCfrTrainable>(player_privates,*this);
-            break;
-        case 1:
-            this->trainables[i] = make_shared<DiscountedCfrTrainableSF>(player_privates,*this);
-            break;
-        case 2:
-            this->trainables[i] = make_shared<DiscountedCfrTrainableHF>(player_privates,*this);
-            break;
+    if (this->trainables[i] == nullptr && create_on_site) {
+        switch ((this->getRound() == GameTreeNode::RIVER) ? use_halffloats : 0) {
+            case 0:
+                this->trainables[i] = make_shared<DiscountedCfrTrainable>(player_privates, *this);
+                break;
+            case 1:
+                this->trainables[i] = make_shared<DiscountedCfrTrainableSF>(player_privates, *this);
+                break;
+            case 2:
+                this->trainables[i] = make_shared<DiscountedCfrTrainableHF>(player_privates, *this);
+                break;
         }
     }
     return this->trainables[i];
 }
 
-void ActionNode::setTrainable(vector<shared_ptr<Trainable>> trainables,vector<PrivateCards>* player_privates) {
+void ActionNode::setTrainable(vector<shared_ptr<Trainable>> trainables, vector<PrivateCards>* player_privates) {
     this->trainables = trainables;
     this->player_privates = player_privates;
 }
 
-void ActionNode::setActions(const vector<GameActions> &actions) {
+void ActionNode::setActions(const vector<GameActions>& actions) {
     ActionNode::actions = actions;
 }
 
-void ActionNode::setChildrens(const vector<shared_ptr<GameTreeNode>> &childrens) {
+void ActionNode::setChildrens(const vector<shared_ptr<GameTreeNode>>& childrens) {
     ActionNode::childrens = childrens;
 }

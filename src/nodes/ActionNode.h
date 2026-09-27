@@ -12,26 +12,29 @@
 #include "include/nodes/GameTreeNode.h"
 #include "include/nodes/GameActions.h"
 
-class ActionNode :public GameTreeNode {
+class ActionNode : public GameTreeNode {
 public:
-    ActionNode(vector<GameActions> actions, vector<shared_ptr<GameTreeNode>> childrens, int player, GameRound round,double pot,shared_ptr<GameTreeNode> parent);
+    ActionNode(vector<GameActions> actions, vector<shared_ptr<GameTreeNode>> childrens, int player, GameRound round,
+               double pot, shared_ptr<GameTreeNode> parent);
     ~ActionNode();
     vector<GameActions>& getActions();
     vector<shared_ptr<GameTreeNode>>& getChildrens();
     int getPlayer();
-    shared_ptr<Trainable> getTrainable(int i,bool create_on_site=true,int use_halffloats=0);
-    void setTrainable(vector<shared_ptr<Trainable>> trainable,vector<PrivateCards>* player_privates);
+    shared_ptr<Trainable> getTrainable(int i, bool create_on_site = true, int use_halffloats = 0);
+    void setTrainable(vector<shared_ptr<Trainable>> trainable, vector<PrivateCards>* player_privates);
     vector<PrivateCards>* player_privates;
 
 private:
     GameTreeNodeType getType() override;
+
 private:
     // TODO: this could be slimmed down
     vector<GameActions> actions;
-public:
-    void setActions(const vector<GameActions> &actions);
 
-    void setChildrens(const vector<shared_ptr<GameTreeNode>> &childrens);
+public:
+    void setActions(const vector<GameActions>& actions);
+
+    void setChildrens(const vector<shared_ptr<GameTreeNode>>& childrens);
 
 private:
     // TODO: this could be slimmed down too. The nodes following different chance nodes can all be shared, perhaps by tagging each branch with an id, reuse as much as possible

@@ -5,8 +5,8 @@
 #ifndef BINDSOLVER_LOOKUP8_H
 #define BINDSOLVER_LOOKUP8_H
 
-#define hashsize(n) ((ub8)1<<(n))
-#define hashmask(n) (hashsize(n)-1)
+#define hashsize(n) ((ub8)1 << (n))
+#define hashmask(n) (hashsize(n) - 1)
 
 /*
 --------------------------------------------------------------------
@@ -27,21 +27,45 @@ This implies that a hash using mix64 has no funnels.  There may be
   those.
 --------------------------------------------------------------------
 */
-#define mix64(a,b,c) \
-{ \
-  a -= b; a -= c; a ^= (c>>43); \
-  b -= c; b -= a; b ^= (a<<9); \
-  c -= a; c -= b; c ^= (b>>8); \
-  a -= b; a -= c; a ^= (c>>38); \
-  b -= c; b -= a; b ^= (a<<23); \
-  c -= a; c -= b; c ^= (b>>5); \
-  a -= b; a -= c; a ^= (c>>35); \
-  b -= c; b -= a; b ^= (a<<49); \
-  c -= a; c -= b; c ^= (b>>11); \
-  a -= b; a -= c; a ^= (c>>12); \
-  b -= c; b -= a; b ^= (a<<18); \
-  c -= a; c -= b; c ^= (b>>22); \
-}
+#define mix64(a, b, c)                                                                                                 \
+    {                                                                                                                  \
+        a -= b;                                                                                                        \
+        a -= c;                                                                                                        \
+        a ^= (c >> 43);                                                                                                \
+        b -= c;                                                                                                        \
+        b -= a;                                                                                                        \
+        b ^= (a << 9);                                                                                                 \
+        c -= a;                                                                                                        \
+        c -= b;                                                                                                        \
+        c ^= (b >> 8);                                                                                                 \
+        a -= b;                                                                                                        \
+        a -= c;                                                                                                        \
+        a ^= (c >> 38);                                                                                                \
+        b -= c;                                                                                                        \
+        b -= a;                                                                                                        \
+        b ^= (a << 23);                                                                                                \
+        c -= a;                                                                                                        \
+        c -= b;                                                                                                        \
+        c ^= (b >> 5);                                                                                                 \
+        a -= b;                                                                                                        \
+        a -= c;                                                                                                        \
+        a ^= (c >> 35);                                                                                                \
+        b -= c;                                                                                                        \
+        b -= a;                                                                                                        \
+        b ^= (a << 49);                                                                                                \
+        c -= a;                                                                                                        \
+        c -= b;                                                                                                        \
+        c ^= (b >> 11);                                                                                                \
+        a -= b;                                                                                                        \
+        a -= c;                                                                                                        \
+        a ^= (c >> 12);                                                                                                \
+        b -= c;                                                                                                        \
+        b -= a;                                                                                                        \
+        b ^= (a << 18);                                                                                                \
+        c -= a;                                                                                                        \
+        c -= b;                                                                                                        \
+        c ^= (b >> 22);                                                                                                \
+    }
 
 /*
 --------------------------------------------------------------------
@@ -67,12 +91,12 @@ Use for hash table lookup, or anything where one collision in 2^^64
 is acceptable.  Do NOT use for cryptographic purposes.
 --------------------------------------------------------------------
 */
-typedef  unsigned long  long ub8;   /* unsigned 8-byte quantities */
-typedef  unsigned long  int  ub4;   /* unsigned 4-byte quantities */
-typedef  unsigned       char ub1;
+typedef unsigned long long ub8; /* unsigned 8-byte quantities */
+typedef unsigned long int ub4;  /* unsigned 4-byte quantities */
+typedef unsigned char ub1;
 
-ub8 hash1(ub1* k,ub8 length,ub8 level);
-ub8 hash2(ub8* k,ub8 length,ub8 level);
-ub8 hash3(ub1* k,ub8 length,ub8 level);
+ub8 hash1(ub1* k, ub8 length, ub8 level);
+ub8 hash2(ub8* k, ub8 length, ub8 level);
+ub8 hash3(ub1* k, ub8 length, ub8 level);
 
 #endif //BINDSOLVER_LOOKUP8_H

@@ -8,16 +8,17 @@
 #include <include/Card.h>
 #include "include/nodes/GameTreeNode.h"
 
-class ChanceNode:public GameTreeNode {
+class ChanceNode : public GameTreeNode {
 public:
-    ChanceNode(const shared_ptr<GameTreeNode> children, GameRound round, double pot, shared_ptr<GameTreeNode>parent, const vector<Card>& cards,bool donk=false);
+    ChanceNode(const shared_ptr<GameTreeNode> children, GameRound round, double pot, shared_ptr<GameTreeNode> parent,
+               const vector<Card>& cards, bool donk = false);
     const vector<Card>& getCards();
     shared_ptr<GameTreeNode> getChildren();
     void setChildren(shared_ptr<GameTreeNode> children);
     int getPlayer();
     bool isDonk();
 
-        //vector<vector<vector<float>>> arr_new_reach_probs;
+    //vector<vector<vector<float>>> arr_new_reach_probs;
     //vector<vector<vector<float>>> best_respond_arr_new_reach_probs;
 
 private:
@@ -30,7 +31,6 @@ private:
     int player{};
     const vector<Card>& cards;
     bool donk;
-
 };
 
 #endif //TEXASSOLVER_CHANCENODE_H
