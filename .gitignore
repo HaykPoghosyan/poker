@@ -15,5 +15,7 @@ moc_*.cpp
 moc_*.h
 qrc_*.cpp
 ui_*.h
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 .DS_Store
